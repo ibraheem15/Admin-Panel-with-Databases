@@ -10,8 +10,12 @@ function signup() {
       const response = await axios.post(
         "http://localhost/api/user/save",
         data
-      );
-      console.log(response);
+      ).then((res) => {
+        console.log(res.data);
+        //redirect to login page
+        window.location.href = "/login";
+
+      });
     } catch (error) {
       console.log(error);
     }

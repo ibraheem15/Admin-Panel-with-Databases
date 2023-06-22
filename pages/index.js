@@ -4,7 +4,6 @@ import Login from "./login";
 
 function index() {
   const [token, setToken] = useState();
-  console.log(token);
 
   if(!token) {
     return <Login setToken={setToken} />
