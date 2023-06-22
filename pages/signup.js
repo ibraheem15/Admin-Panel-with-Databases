@@ -70,6 +70,22 @@ function signup() {
               name="username"
               className={styles.inputField}
               placeholder="Username"
+              pattern="[a-z0-9\s]+"
+              minLength={3}
+              title="Please enter a valid username with only lowercase letters e.g. abc123 "
+            />
+          </label>
+          <label className={styles.formLabel}>
+            <input
+              type="text"
+              required
+              onChange={handleChange}
+              name="email"
+              className={styles.inputField}
+              placeholder="Email" 
+              pattern="[^@\s]+@[^@\s]+\.[^@\s]+" 
+              minLength={3}
+              title="Please enter a valid email address e.g. abc@abc.com"
             />
           </label>
           <label className={styles.formLabel}>
@@ -80,6 +96,8 @@ function signup() {
               name="password"
               className={styles.inputField}
               placeholder="Password"
+              pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
+              title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
             />
           </label>
           <label className={styles.formLabel}>
@@ -90,6 +108,8 @@ function signup() {
               name="mobile"
               className={styles.inputField}
               placeholder="Mobile"
+              pattern="[0-9]{11}"
+              title="Please enter a valid mobile number e.g. 01234567891"
             />
           </label>
           <div className={styles.submitButtonWrapper}>

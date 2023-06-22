@@ -50,7 +50,8 @@ export default function Login({ setToken }) {
 
     const user = users.find(
       (user) =>
-        user.username === data.username && user.password === data.password
+        // user.username === data.username && user.password === data.password
+        user.email === data.email && user.password === data.password
     );
 
     if (user) {
@@ -81,14 +82,28 @@ export default function Login({ setToken }) {
 
       <div className={styles.login}>
         <h1 className={styles.loginTitle}>Please Log In</h1>
-        <form className={styles.loginForm}>
+        <form className={styles.loginForm} onSubmit={handleSubmit}>
           <label className={styles.formLabel}>
-            <input
+            {/* <input
               type="text"
               className={styles.inputField}
               onChange={(e) => setData({ ...data, username: e.target.value })}
               required
               placeholder="Username"
+              pattern="[a-z0-9\s]+"
+              minLength={3}
+              title="Please enter a valid username with only lowercase letters e.g. abc123 "
+            /> */}
+            <input
+              type="text"
+              required
+              onChange={(e) => setData({ ...data, email: e.target.value })}
+              name="email"
+              className={styles.inputField}
+              placeholder="Email"
+              pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+              minLength={3}
+              title="Please enter a valid email address e.g. abc@abc.com"
             />
           </label>
           <label className={styles.formLabel}>
@@ -98,6 +113,8 @@ export default function Login({ setToken }) {
               onChange={(e) => setData({ ...data, password: e.target.value })}
               required
               placeholder="Password"
+              pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
+              title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
             />
           </label>
           <div className={styles.submitButtonWrapper}>
@@ -109,7 +126,7 @@ export default function Login({ setToken }) {
             <button
               type="submit"
               className={styles.submitButton2}
-              onClick={handleSubmit}
+              // onClick={handleSubmit}
             >
               Sign In
             </button>
