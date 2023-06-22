@@ -16,9 +16,10 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
-        $sql = "INSERT INTO users(id,username, password,mobile) VALUES (null,:username, :password,:mobile)";
+        $sql = "INSERT INTO users(id,username,email, password,mobile) VALUES (null,:username,:email, :password,:mobile)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':username', $data->username);
+        $stmt->bindParam(':email', $data->email);
         $stmt->bindParam(':password', $data->password);
         $stmt->bindParam(':mobile', $data->mobile);
         if ($stmt->execute()) {
