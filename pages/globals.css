@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-.login-wrapper {
-    background-color: blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Path: pages\login.js */
+
+.login-wrapper
+{
+    @apply bg-blue-500 flex flex-col items-center;
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import axios from "axios";
+import styles from "../styles/login.module.css";
 
 // async function loginUser(credentials) {
 //   return fetch("http://localhost:8080/login", {
@@ -30,6 +31,7 @@ export default function Login({ setToken }) {
 
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
+  const [valid, setValid] = useState(false);
 
   useEffect(() => {
     getusers();
@@ -47,47 +49,72 @@ export default function Login({ setToken }) {
     users.map((user) => {
       if (user.username === data.username && user.password === data.password) {
         console.log("match");
+        window.location.href = "/";
+        setValid(true);
         // set token
-        setToken({
-          username: user.username,
-          password: user.password,
-        });
-        // window.location.href = "/";
+        // setToken(user);
+        // const token = user;
+        // setToken(token);
       }
     });
+    if (!valid) {
+      //create label for invalid login
+      const label = document.createElement("label");
+      label.innerHTML = "Invalid Login";
+      label.style.color = "red";
+      label.style.fontSize = "12px";
+      label.style.fontWeight = "bold";
+      label.style.marginTop = "10px";
+      label.style.marginBottom = "10px";
+      const form = document.querySelector("form");
+      form.appendChild(label);
+
+      //remove label after 3 seconds
+      setTimeout(() => {
+        label.remove();
+      }
+      , 3000);
+
+      
+    }
+
   };
 
   return (
-    <div className="login-wrapper">
-      <h1 className="">Please Log In</h1>
-      <form>
-        <label>
+    <div className={styles.login}>
+      <h1 className={styles.loginTitle}>Please Log In</h1>
+      <form className={styles.loginForm}>
+        <label className={styles.formLabel}>
           <p>Username</p>
           <input
             type="text"
-            // onChange={(e) => setUsername(e.target.value)}
+            className={styles.inputField}
             onChange={(e) => setData({ ...data, username: e.target.value })}
             required
           />
         </label>
-        <label>
+        <label className={styles.formLabel}>
           <p>Password</p>
           <input
             type="password"
-            // onChange={(e) => setPassword(e.target.value)}
+            className={styles.inputField}
             onChange={(e) => setData({ ...data, password: e.target.value })}
             required
           />
         </label>
-        <div>
-          <button type="submit" onClick={handleSubmit}>
+        <div className={styles.submitButtonWrapper}>
+          <button
+            type="submit"
+            className={styles.submitButton}
+            onClick={handleSubmit}
+          >
             Submit
           </button>
         </div>
       </form>
-      <div className="login-wrapper">
+      <div className={styles.loginWrapper}>
         <Link href="/signup">
-          <a>Sign Up</a>
+          <a className={styles.signupLink}>Sign Up</a>
         </Link>
       </div>
     </div>
