@@ -6,7 +6,6 @@ include 'DBConnect.php';
 
 $db = new DbConnect;
 $conn = $db->connect();
-var_dump($conn);
 
 //get form data
 $data = json_decode(file_get_contents("php://input"));
@@ -14,29 +13,28 @@ print_r($data);
 
 //insert data into database
 $method = $_SERVER['REQUEST_METHOD'];
-switch($method){
+switch ($method) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         $sql = "INSERT INTO users(id,username, password,mobile) VALUES (null,:username, :password,:mobile)";
         $stmt = $conn->prepare($sql);
-        // $stmt = $conn->prepare("INSERT INTO users (username, password,mobile) VALUES (:username, :password,123)");
         $stmt->bindParam(':username', $data->username);
         $stmt->bindParam(':password', $data->password);
         $stmt->bindParam(':mobile', $data->mobile);
-        // $username = $_POST['username'];
-        // $password = $_POST['password'];
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             echo json_encode(array('message' => 'Data inserted successfully'));
-        }else{
+        } else {
             echo json_encode(array('message' => 'Data insertion failed'));
         }
         break;
     case 'GET':
-        $stmt = $conn->prepare("SELECT * FROM `users`");
+        $sql = "SELECT * FROM users";
+        $stmt = $conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($result);
         break;
+
     case 'PUT':
         $data = (file_get_contents("php://input"));
         $stmt = $conn->prepare("UPDATE `users` SET `username` = :username, `password` = :password WHERE `id` = :id");
