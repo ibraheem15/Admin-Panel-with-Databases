@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 import axios from "axios";
 import styles from "../styles/login.module.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // async function loginUser(credentials) {
 //   return fetch("http://localhost:8080/login", {
@@ -31,7 +33,6 @@ export default function Login({ setToken }) {
 
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
-  const [valid, setValid] = useState(false);
 
   useEffect(() => {
     getusers();
@@ -46,78 +47,76 @@ export default function Login({ setToken }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    users.map((user) => {
-      if (user.username === data.username && user.password === data.password) {
-        console.log("match");
-        window.location.href = "/";
-        setValid(true);
-        // set token
-        // setToken(user);
-        // const token = user;
-        // setToken(token);
-      }
-    });
-    if (!valid) {
-      //create label for invalid login
-      const label = document.createElement("label");
-      label.innerHTML = "Invalid Login";
-      label.style.color = "red";
-      label.style.fontSize = "12px";
-      label.style.fontWeight = "bold";
-      label.style.marginTop = "10px";
-      label.style.marginBottom = "10px";
-      const form = document.querySelector("form");
-      form.appendChild(label);
 
-      //remove label after 3 seconds
+    const user = users.find(
+      (user) =>
+        user.username === data.username && user.password === data.password
+    );
+
+    if (user) {
+      console.log("Match");
+      //show toast message
+      toast.success("Login Successful", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2800,
+      });
+
+      //wait 3 seconds before redirecting
       setTimeout(() => {
-        label.remove();
-      }
-      , 3000);
-
-      
+        window.location.href = "/";
+      }, 3000);
+    } else {
+      console.log("No Match");
+      //show toast message
+      toast.error("Invalid Username or Password", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2800,
+      });
     }
-
   };
 
   return (
-    <div className={styles.login}>
-      <h1 className={styles.loginTitle}>Please Log In</h1>
-      <form className={styles.loginForm}>
-        <label className={styles.formLabel}>
-          <p>Username</p>
-          <input
-            type="text"
-            className={styles.inputField}
-            onChange={(e) => setData({ ...data, username: e.target.value })}
-            required
-          />
-        </label>
-        <label className={styles.formLabel}>
-          <p>Password</p>
-          <input
-            type="password"
-            className={styles.inputField}
-            onChange={(e) => setData({ ...data, password: e.target.value })}
-            required
-          />
-        </label>
-        <div className={styles.submitButtonWrapper}>
-          <button
-            type="submit"
-            className={styles.submitButton}
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-      <div className={styles.loginWrapper}>
-        <Link href="/signup">
-          <a className={styles.signupLink}>Sign Up</a>
-        </Link>
+    <body className={styles.body}>
+      <ToastContainer />
+
+      <div className={styles.login}>
+        <h1 className={styles.loginTitle}>Please Log In</h1>
+        <form className={styles.loginForm}>
+          <label className={styles.formLabel}>
+            <input
+              type="text"
+              className={styles.inputField}
+              onChange={(e) => setData({ ...data, username: e.target.value })}
+              required
+              placeholder="Username"
+            />
+          </label>
+          <label className={styles.formLabel}>
+            <input
+              type="password"
+              className={styles.inputField}
+              onChange={(e) => setData({ ...data, password: e.target.value })}
+              required
+              placeholder="Password"
+            />
+          </label>
+          <div className={styles.submitButtonWrapper}>
+            <button type="button" className={styles.submitButton1}>
+              <Link href="/signup" className={styles.Link}>
+                <a className={styles.Link}>Sign Up</a>
+              </Link>
+            </button>
+            <button
+              type="submit"
+              className={styles.submitButton2}
+              onClick={handleSubmit}
+            >
+              Sign In
+            </button>
+          </div>
+        </form>
       </div>
-    </div>
+    </body>
   );
 }
 
