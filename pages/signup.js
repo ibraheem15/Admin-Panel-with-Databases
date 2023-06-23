@@ -4,6 +4,7 @@ import styles from "../styles/signup.module.css";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import RootLayout from "../components/layout";
 
 function signup() {
   const [data, setData] = useState({});
@@ -58,74 +59,79 @@ function signup() {
   };
 
   return (
-    <body className={styles.body}>
-      <div className={styles.login}>
-        <h1 className={styles.loginTitle}>Please Sign Up</h1>
-        <form className={styles.loginForm} onSubmit={handleSubmit}>
-          <label className={styles.formLabel}>
-            <input
-              type="text"
-              required
-              onChange={handleChange}
-              name="username"
-              className={styles.inputField}
-              placeholder="Username"
-              pattern="[a-z0-9\s]+"
-              minLength={3}
-              title="Please enter a valid username with only lowercase letters e.g. abc123 "
-            />
-          </label>
-          <label className={styles.formLabel}>
-            <input
-              type="text"
-              required
-              onChange={handleChange}
-              name="email"
-              className={styles.inputField}
-              placeholder="Email" 
-              pattern="[^@\s]+@[^@\s]+\.[^@\s]+" 
-              minLength={3}
-              title="Please enter a valid email address e.g. abc@abc.com"
-            />
-          </label>
-          <label className={styles.formLabel}>
-            <input
-              type="password"
-              required
-              onChange={handleChange}
-              name="password"
-              className={styles.inputField}
-              placeholder="Password"
-              pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
-              title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
-            />
-          </label>
-          <label className={styles.formLabel}>
-            <input
-              type="text"
-              required
-              onChange={handleChange}
-              name="mobile"
-              className={styles.inputField}
-              placeholder="Mobile"
-              pattern="[0-9]{11}"
-              title="Please enter a valid mobile number e.g. 01234567891"
-            />
-          </label>
-          <div className={styles.submitButtonWrapper}>
-            <button type="button" className={styles.submitButton2}>
+    <RootLayout>
+      <body className={styles.body}>
+        <div className={styles.login}>
+          <h1 className={styles.loginTitle}>Please Sign Up</h1>
+          <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <label className={styles.formLabel}>
+              <input
+                type="text"
+                required
+                onChange={handleChange}
+                name="username"
+                className={styles.inputField}
+                placeholder="Username"
+                pattern="[a-z0-9\s]+"
+                minLength={3}
+                title="Please enter a valid username with only lowercase letters e.g. abc123 "
+              />
+            </label>
+            <label className={styles.formLabel}>
+              <input
+                type="text"
+                required
+                onChange={handleChange}
+                name="email"
+                className={styles.inputField}
+                placeholder="Email"
+                pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                minLength={3}
+                title="Please enter a valid email address e.g. abc@abc.com"
+              />
+            </label>
+            <label className={styles.formLabel}>
+              <input
+                type="password"
+                required
+                onChange={handleChange}
+                name="password"
+                className={styles.inputField}
+                placeholder="Password"
+                pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
+                title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
+              />
+            </label>
+            <label className={styles.formLabel}>
+              <input
+                type="text"
+                required
+                onChange={handleChange}
+                name="mobile"
+                className={styles.inputField}
+                placeholder="Mobile"
+                pattern="[0-9]{11}"
+                title="Please enter a valid mobile number e.g. 01234567891"
+              />
+            </label>
+            <div className={styles.submitButtonWrapper}>
               <Link href="/login">
-                <a className={styles.Link}>Log In</a>
+                <a className={styles.Link}>
+                  <button type="button" className={styles.submitButton2}>
+                    Log In
+                  </button>
+                </a>
               </Link>
-            </button>
-            <button type="submit" className={styles.submitButton1}>
-              Sign Up
-            </button>
-            <ToastContainer />
-          </div>
-        </form>
-      </div>
-    </body>
+
+              <button type="submit" className={styles.submitButton1}>
+                Sign Up
+              </button>
+              <ToastContainer />
+            </div>
+          </form>
+        </div>
+      </body>
+    </RootLayout>
   );
 }
 

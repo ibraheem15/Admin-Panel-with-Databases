@@ -1,0 +1,177 @@
+.navbar_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  background: #ef4c5f;
+  color: #dafffb;
+  position: fixed;
+  top: 0;
+  font-family: "Poppins", sans-serif;
+  margin-left: -1rem;
+  padding-left: 2rem;
+  z-index: 1;
+}
+
+.logo_container {
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #dafffb;
+}
+
+.logo_container:hover {
+  opacity: 0.8;
+}
+
+.bars {
+  width: 22px;
+  height: auto;
+  cursor: pointer;
+  display: none;
+}
+
+.bar {
+  width: 100%;
+  height: 2px;
+  background: #dafffb;
+  margin: 5px;
+}
+
+.nav_items {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  list-style: none;
+}
+
+.nav_link a {
+  text-decoration: none;
+  color: #dafffb;
+  padding: 10px;
+  text-transform: uppercase;
+  transition: 0.2s;
+}
+
+.nav_link:after {
+  content: "";
+  display: block;
+  border-top: 2px solid #dafffb;
+  transform: scaleX(0);
+  -webkit-transform: scaleX(0);
+  -moz-transform: scaleX(0);
+  -ms-transform: scaleX(0);
+  -o-transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+
+}
+
+.nav_link:hover:after {
+  transform: scaleX(0.8);
+}
+
+.login_register {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-right: 3rem;
+}
+
+.button {
+  color: #dafffb;
+  border: 2px solid #dafffb;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: all ease-in 0.3s;
+}
+
+.button:hover {
+  background: #dafffb;
+  color: #ef4c5f;
+}
+
+@media (max-width: 700px) {
+  .nav_items {
+    flex-direction: column;
+    position: fixed;
+    top: 50px;
+    right: -100%;
+    width: 100vw;
+    height: 100vh;
+    padding: 1rem 0;
+    z-index: 99;
+    background: #ef4c5f;
+    transition: 0.2s ease-in;
+    transition: 0.2s ease-in-out;
+  }
+
+  .bars {
+    display: block;
+    margin-right: 3rem;
+  }
+
+  .bar {
+    width: 100%;
+    height: 2px;
+    background: #dafffb;
+    margin: 5px;
+  }
+
+  .nav_items {
+    gap: 3rem;
+  }
+
+  .login_register {
+    width: 50%;
+    text-align: center;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 0 auto;
+  }
+
+  .button {
+    padding: 1rem 0;
+  }
+
+  .nav_items_active {
+    right: 0;
+  }
+}
+
+.nav_items_active {
+  right: 0%;
+}
+
+.menu_toggle {
+  display: none;
+  cursor: pointer;
+}
+
+.bar,
+.bar1,
+.bar2,
+.bar3 {
+  width: 22px;
+  height: 2px;
+  background: #dafffb;
+  margin: 5px;
+  transition: transform 0.3s ease-in-out;
+  
+}
+
+.bar1_active {
+  transform: rotate(45deg) translateY(6px) translateX(6px);
+}
+
+.bar2_active {
+  opacity: 0;
+}
+
+.bar3_active {
+  transform: rotate(-45deg) translateY(-4px) translateX(4px);
+}

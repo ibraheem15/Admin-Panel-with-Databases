@@ -5,6 +5,7 @@ import axios from "axios";
 import styles from "../styles/login.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import RootLayout from "../components/layout";
 
 // async function loginUser(credentials) {
 //   return fetch("http://localhost:8080/login", {
@@ -77,63 +78,53 @@ export default function Login({ setToken }) {
   };
 
   return (
-    <body className={styles.body}>
-      <ToastContainer />
-
-      <div className={styles.login}>
-        <h1 className={styles.loginTitle}>Please Log In</h1>
-        <form className={styles.loginForm} onSubmit={handleSubmit}>
-          <label className={styles.formLabel}>
-            {/* <input
-              type="text"
-              className={styles.inputField}
-              onChange={(e) => setData({ ...data, username: e.target.value })}
-              required
-              placeholder="Username"
-              pattern="[a-z0-9\s]+"
-              minLength={3}
-              title="Please enter a valid username with only lowercase letters e.g. abc123 "
-            /> */}
-            <input
-              type="text"
-              required
-              onChange={(e) => setData({ ...data, email: e.target.value })}
-              name="email"
-              className={styles.inputField}
-              placeholder="Email"
-              pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
-              minLength={3}
-              title="Please enter a valid email address e.g. abc@abc.com"
-            />
-          </label>
-          <label className={styles.formLabel}>
-            <input
-              type="password"
-              className={styles.inputField}
-              onChange={(e) => setData({ ...data, password: e.target.value })}
-              required
-              placeholder="Password"
-              pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
-              title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
-            />
-          </label>
-          <div className={styles.submitButtonWrapper}>
-            <button type="button" className={styles.submitButton1}>
-              <Link href="/signup" className={styles.Link}>
-                <a className={styles.Link}>Sign Up</a>
+    <RootLayout>
+      <body className={styles.body}>
+        <ToastContainer />
+        <div className={styles.login}>
+          <h1 className={styles.loginTitle}>Please Log In</h1>
+          <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <label className={styles.formLabel}>
+              <input
+                type="text"
+                required
+                onChange={(e) => setData({ ...data, email: e.target.value })}
+                name="email"
+                className={styles.inputField}
+                placeholder="Email"
+                pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                minLength={3}
+                title="Please enter a valid email address e.g. abc@abc.com"
+              />
+            </label>
+            <label className={styles.formLabel}>
+              <input
+                type="password"
+                className={styles.inputField}
+                onChange={(e) => setData({ ...data, password: e.target.value })}
+                required
+                placeholder="Password"
+                pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
+                title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
+              />
+            </label>
+            <div className={styles.submitButtonWrapper}>
+              <Link href="/signup">
+                <a className={styles.Link}>
+                  <button type="button" className={styles.submitButton1}>
+                    Sign Up
+                  </button>
+                </a>
               </Link>
-            </button>
-            <button
-              type="submit"
-              className={styles.submitButton2}
-              // onClick={handleSubmit}
-            >
-              Sign In
-            </button>
-          </div>
-        </form>
-      </div>
-    </body>
+
+              <button type="submit" className={styles.submitButton2}>
+                Sign In
+              </button>
+            </div>
+          </form>
+        </div>
+      </body>
+    </RootLayout>
   );
 }
 
