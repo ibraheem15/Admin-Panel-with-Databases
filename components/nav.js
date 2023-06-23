@@ -48,14 +48,14 @@ export default function Nav() {
         <li className={styles.nav_link}>
           <a href="#">About</a>
         </li>
-        <div className={styles.login_register}>
+        {/* <div className={styles.login_register}>
           <Link href="/login">
             <a className={styles.button}>Sign In</a>
           </Link>
           <Link href="/signup">
             <a className={styles.button}>Register</a>
           </Link>
-        </div>
+        </div> */}
       </ul>
     </nav>
   );

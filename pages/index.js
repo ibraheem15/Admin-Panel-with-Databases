@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Login from "./login";
 import RootLayout from "../components/layout";
 
 function index() {

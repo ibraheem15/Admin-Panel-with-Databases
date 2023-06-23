@@ -24,8 +24,8 @@ export default function Footer() {
             <a href="#">
               <i>
                 <img
-                  width="30"
-                  height="30"
+                  width="33"
+                  height="33"
                   src="https://img.icons8.com/ios-glyphs/250/ffffff/facebook-new.png"
                   alt="facebook-new"
                 />
