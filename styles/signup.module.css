@@ -112,6 +112,7 @@
   font-weight: 300;
   letter-spacing: 0.2px;
   background: #e8e9ec;
+  transition: 0.3s ease
 }
 
 .Link:hover {
@@ -119,22 +120,16 @@
   color: #ffffff;
   background: #73727a;
   transition: 0.3s;
+  /* transition out smooth */
   .submitButton2 {
     color: #fff;
   }
 }
-.Link:hover {
-  text-decoration: none;
-  color: #ffffff;
-}
+
+
 
 .submitButton1:hover {
   background: #73727a;
   color: #fff;
 }
 
-.submitButton2:hover {
-  background: #73727a;
-  color: #fff;
-  border: none;
-}

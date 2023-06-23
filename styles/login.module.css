@@ -108,6 +108,7 @@
   font-weight: 300;
   letter-spacing: 0.2px;
   background: #e8e9ec;
+  transition: 0.3s ease
 }
 
 .Link:hover {

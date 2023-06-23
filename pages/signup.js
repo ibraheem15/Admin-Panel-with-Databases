@@ -21,12 +21,6 @@ function signup() {
     });
   };
 
-  const showToastMessage = () => {
-    toast.success("Success Notification !", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -121,7 +115,7 @@ function signup() {
                     Log In
                   </button>
                 </a>
-              </Link>
+              </Link> 
 
               <button type="submit" className={styles.submitButton1}>
                 Sign Up

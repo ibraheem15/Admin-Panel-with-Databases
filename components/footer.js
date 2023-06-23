@@ -4,23 +4,23 @@ import styles from "../styles/footer.module.css";
 
 export default function Footer() {
   return (
-    <footer class={styles.footer}>
-      <div class={styles.footer_container}>
-        <div class={styles.footer_column}>
+    <footer className={styles.footer}>
+      <div className={styles.footer_container}>
+        <div className={styles.footer_column}>
           <h3 className={styles.footer_logo}>About Us</h3>
           <p className={styles.footer_text}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut viverra
             eros id ante dignissim lacinia.
           </p>
         </div>
-        <div class={styles.footer_column}>
+        <div className={styles.footer_column}>
           <h3 className={styles.footer_logo}>Contact</h3>
           <p className={styles.footer_text}>Email: hellowWorld@gmail.com</p>
           <p>Phone: +92123123123</p>
         </div>
-        <div class={styles.footer_column}>
+        <div className={styles.footer_column}>
           <h3 className={styles.footer_logo}>Follow Us</h3>
-          <div class={styles.social_icons}>
+          <div className={styles.social_icons}>
             <a href="#">
               <i>
                 <img
@@ -32,7 +32,7 @@ export default function Footer() {
               </i>
             </a>
             <a href="#">
-              <i class={""}>
+              <i className={""}>
                 <img
                   width="30"
                   height="30"
@@ -42,7 +42,7 @@ export default function Footer() {
               </i>
             </a>
             <a href="#">
-              <i class={""}>
+              <i className={""}>
                 <img
                   width="30"
                   height="30"
@@ -54,7 +54,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div class={styles.footer_bottom}>
+      <div className={styles.footer_bottom}>
         <p>&copy; 2023 Your Company. All rights reserved.</p>
       </div>
     </footer>
