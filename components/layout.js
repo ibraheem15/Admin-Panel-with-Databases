@@ -2,6 +2,8 @@
 import Nav from "./nav";
 import Footer from "./footer";
 import Sidebar from "./sidebar";
+import { useRouter } from "next/dist/client/router";
+import { useState } from "react";
 
 export const metadata = {
   title: "Create Next App",
@@ -9,10 +11,16 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const router = useRouter();
+  const [page, setPage] = useState(router.pathname);
+
   return (
     <div>
       <Nav />
-      <Sidebar />
+      {/* <Sidebar /> */}
+      {/* if page is login or register then dont show sidebar else show it */}
+      {page === "/login" || page === "/register" ? null : <Sidebar />}
+
       {children}
       <Footer />
     </div>

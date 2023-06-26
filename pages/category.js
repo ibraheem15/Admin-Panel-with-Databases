@@ -1,5 +1,6 @@
 import React from "react";
 import RootLayout from "../components/layout";
+import Sidebar from "../components/sidebar";
 
 export default function category() {
   return (

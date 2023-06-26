@@ -1,10 +1,20 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import styles from "../styles/footer.module.css";
+import { useRouter } from "next/dist/client/router";
 
 export default function Footer() {
+  const router = useRouter();
+  const [page, setPage] = useState(router.pathname);
+
   return (
-    <footer className={styles.footer}>
+    <footer
+      className={
+        page === "/login" || page === "/register"
+          ? styles.footer_login
+          : styles.footer
+      }
+    >
       <div className={styles.footer_container}>
         <div className={styles.footer_column}>
           <h3 className={styles.footer_logo}>About Us</h3>
