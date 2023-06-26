@@ -34,7 +34,7 @@ function signup() {
     } else {
       try {
         const response = await axios.post(
-          "http://localhost/api/user/save",
+          "http://localhost/api/user/index.php",
           data
         );
         console.log(response.data);

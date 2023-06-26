@@ -1,0 +1,86 @@
+.body {
+    font-family: "Rubik", sans-serif;
+  }
+  
+  .category {
+    max-width: 400px;
+    margin: 10rem auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 25px rgba(0, 0, 0, 0.2);
+    margin-left: 40vw;
+  }
+  
+  .catTitle {
+    font-weight: 300;
+    margin-left: 5%;
+  }
+  
+  .catForm {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    margin-right: 10%;
+  }
+  
+  .formLabel {
+    margin-bottom: 10px;
+  }
+  
+  .inputWrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .inputField {
+    /* padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px; */
+    padding: 10px 5px;
+    font-size: 16px;
+    display: block;
+    font-family: "Rubik", sans-serif;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #747474;
+    outline: none;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+  }
+  
+  .submitButtonWrapper {
+    /* margin-top: 20px; */
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+  
+  .submitButton2 {
+    border: none;
+    padding-right: 3.5rem;
+    padding-left: 3.5rem;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    background: #2d3b55;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #ffffff;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    border-radius: 0.45rem;
+  }
+  
+  .submitButton2:hover {
+    background: #73727a;
+    color: #fff;
+    border: none;
+  }
+  

@@ -15,7 +15,7 @@ export default function category() {
 
     try {
       const response = await axios.post(
-        "http://localhost/api/category/save.php",
+        "http://localhost/api/category/index.php",
         data
       );
       console.log(response.data);
@@ -27,6 +27,10 @@ export default function category() {
       // window.location.href = "/category";
     } catch (error) {
       console.log(error);
+      toast.error("Category creation failed", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2800,
+      });
     }
   };
 

@@ -40,7 +40,7 @@ export default function Login({ setToken }) {
   }, []);
 
   const getusers = async () => {
-    axios.get("http://localhost/api/user/").then((res) => {
+    axios.get("http://localhost/api/user/index.php").then((res) => {
       // console.log(res.data);
       setUsers(res.data);
     });

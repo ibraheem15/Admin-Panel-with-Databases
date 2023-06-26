@@ -23,9 +23,11 @@ export default function sidebar() {
       <div className={styles.sidebar__content}>
         <ul className={styles.sidebar__list}>
           <li>
-            <span className={styles.list_title}>
-              <Link href="/">Dashboard</Link>
-            </span>
+            <Link href="/">
+              <span className={styles.list_title}>
+                Dashboard
+              </span>
+            </Link>
           </li>
         </ul>
         <ul className={styles.sidebar__list}>
