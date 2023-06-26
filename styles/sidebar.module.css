@@ -33,21 +33,26 @@
 
 .sidebar__list {
   list-style: none;
-  padding: 0;
+  padding: 0.2rem 0.5rem;
   margin: 0;
 }
 
 .list_title {
+  display: flex;
   cursor: pointer;
-    padding: 10px 20px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: .55rem;
 }
 
 .list_title:hover {
   background-color: #eee;
+}
+
+.list_title a {
+  text-decoration: none;
+  color: #151515;
 }
 
 .list_inner {
@@ -55,6 +60,15 @@
 }
 
 .list_inner_content {
-  /* display: block; */
 }
 
+.list_inner_content li {
+  padding: 10px 10px;
+  cursor: pointer;
+  color: #555;
+  border-radius: .65rem;
+}
+
+.list_inner_content li:hover {
+  background-color: #eee;
+}

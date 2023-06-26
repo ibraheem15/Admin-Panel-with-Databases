@@ -10,7 +10,7 @@ function index() {
   // }
   return (
     <RootLayout>
-      <div style={{ marginTop: "70px" }}>
+      <div style={{ marginTop: "70px",marginLeft:"250px" }}>
         <h1 style={{ marginTop: "100px", marginBottom:"50px",textAlign:"center" }}>Dashboard</h1>
         <h3 style={{ marginTop: "50px", marginBottom:"150px",textAlign:"center" }}>
           What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing
