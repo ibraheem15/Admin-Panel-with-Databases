@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout";
 import styles from "../../styles/catcreate.module.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,10 +8,31 @@ import axios from "axios";
 
 export default function category() {
   const [data, setData] = useState({});
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    axios.get("http://localhost/api/category/index.php").then((res) => {
+      console.log(res.data);
+      setCategories(res.data);
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
+
+    //if name already exists in database, do not create
+    const found = categories.find((element) => element.name === data.namee);
+    if (found) {
+      toast.error("Category already exists!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
 
     try {
       const response = await axios.post(

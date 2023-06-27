@@ -30,7 +30,6 @@ export default function read() {
       pathname: "/category/update",
       query: { id: id, name: name, description: description },
     });
-
   }
 
   function handleDelete(e, id) {
@@ -56,11 +55,7 @@ export default function read() {
   return (
     <RootLayout>
       <div
-        style={{
-          marginTop: "70px",
-          marginLeft: "250px",
-          fontFamily: "sans-serif",
-        }}
+        className={styles.container}
       >
         <ToastContainer />
         <div className={styles.title}>

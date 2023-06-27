@@ -46,7 +46,7 @@
   align-items: center;
   gap: 3rem;
   list-style: none;
-  margin-right: 3rem;
+  /* margin-right: 3rem; */
 }
 
 .nav_link a {
@@ -101,9 +101,11 @@
     flex-direction: column;
     position: fixed;
     top: 50px;
-    right: -100%;
+    right: -115%;
+    /* right: -100%; */
     width: 100vw;
-    height: 100vh;
+    /* height: 100vh; */
+    height: 100%;
     padding: 1rem 0;
     z-index: 99;
     background: #ef4c5f;

@@ -7,6 +7,11 @@ import Link from "next/link";
 export default function sidebar() {
   const [showProduct, setShowProduct] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
   const toggleProduct = () => {
     setShowProduct(!showProduct);
@@ -15,18 +20,32 @@ export default function sidebar() {
   const toggleCategory = () => {
     setShowCategory(!showCategory);
   };
+
   return (
-    <div className={styles.sidebar}>
+    // <div className={styles.sidebar}>
+    <div className={`${isOpen ? styles.sidebar_active : styles.sidebar}`}>
       <div className={styles.sidebar__header}>
         <h3 className={styles.sidebar__title}>Sidebar</h3>
+        <div
+          className={`${isOpen ? styles.bars_active : styles.bars}`}
+          onClick={toggleSidebar}
+        >
+          <div
+            className={`${styles.bar} ${isOpen ? styles.bar1_active : ""}`}
+          ></div>
+          <div
+            className={`${styles.bar} ${isOpen ? styles.bar2_active : ""}`}
+          ></div>
+          <div
+            className={`${styles.bar} ${isOpen ? styles.bar3_active : ""}`}
+          ></div>
+        </div>
       </div>
       <div className={styles.sidebar__content}>
         <ul className={styles.sidebar__list}>
           <li>
             <Link href="/">
-              <span className={styles.list_title}>
-                Dashboard
-              </span>
+              <span className={styles.list_title}>Dashboard</span>
             </Link>
           </li>
         </ul>
@@ -72,18 +91,18 @@ export default function sidebar() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
+                    <Link href="/category/read">
+                      <li>All Categories</li>
+                    </Link>
                     <Link href="/category/create">
                       <li>Create Category</li>
                     </Link>
-                    <Link href="/category/read">
-                      <li>Read Category</li>
-                    </Link>
-                    <Link href="/category/update">
+                    {/* <Link href="/category/update">
                       <li>Update Category</li>
                     </Link>
                     <Link href="/category/delete">
                       <li>Delete Category</li>
-                    </Link>
+                    </Link> */}
                   </motion.div>
                 </motion.ul>
               )}

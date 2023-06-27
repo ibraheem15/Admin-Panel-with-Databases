@@ -7,30 +7,51 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function update() {
   const [data, setData] = useState({});
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    setData({
-      id: window.location.search.split("=")[1].split("&")[0],
-      name: window.location.search.split("=")[2].split("&")[0],
-      description: window.location.search.split("=")[3],
+    getCategory();
+    //get all data from api and then filter it by id
+    axios.get("http://localhost/api/category/index.php").then((res) => {
+      console.log(res.data);
+      const result = res.data.filter(
+        (item) => item.id == window.location.search.split("=")[1].split("&")[0]
+      );
+      console.log(result);
+      setData({
+        id: result[0].id,
+        name: result[0].name,
+        description: result[0].description,
+      });
     });
+
   }, []);
+
+  const getCategory = async () => {
+    try {
+      axios
+        .get("http://localhost/api/category/index.php")
+        .then((res) => {
+          console.log(res.data);
+          setCategories(res.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    // console.log(data);
-    // try {
-    //   axios.put("http://localhost/api/category/index.php", data).then((res) => {
-    //     console.log(res.data);
-    //     toast.success("Category updated successfully!", {
-    //       position: toast.POSITION.TOP_CENTER,
-    //     });
-    //   });
-    // } catch (err) {
-    //   toast.error("Category not updated!", {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    // }
+
+    const result = categories.filter((item) => item.name == data.name);
+    console.log(result);
+    if (result.length > 0) {
+      toast.error("Category already exists!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
     try {
       axios
         .put("http://localhost/api/category/index.php?id=" + data.id, data)
