@@ -1,40 +1,77 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import RootLayout from "../components/layout";
-import Sidebar from "../components/sidebar";
+// import Sidebar from "../components/sidebar";
+import styles from "../styles/index.module.css";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 function index() {
   const [token, setToken] = useState();
+  const [categories, setcategories] = useState([]);
+  const [products, setproducts] = useState([]);
+
+  
+
+  useEffect(() => {
+    const token = Cookies.get("user");
+    if(!token) {
+      window.location.href = "/login";
+    }
+
+    getcategories();
+    getproducts();
+  }, []);
+
+  const getcategories = async () => {
+    axios.get("http://localhost/api/category/index.php").then((res) => {
+      // console.log(res.data);
+      setcategories(res.data);
+    });
+  };
+
+  const getproducts = async () => {
+    axios.get("http://localhost/api/product/index.php").then((res) => {
+      console.log(res.data);
+      setproducts(res.data);
+    });
+  };
 
   // if(!token) {
   //   return <Login setToken={setToken} />
   // }
   return (
     <RootLayout>
-      <div style={{ marginTop: "70px",marginLeft:"250px",fontFamily:"sans-serif" }}>
-        <h1 style={{ marginTop: "100px", marginBottom:"50px",textAlign:"center" }}>Dashboard</h1>
-        <h3 style={{ marginTop: "50px", marginBottom:"150px",textAlign:"center",fontWeight:"normal" }}>
-          What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing
-          and typesetting industry. Lorem Ipsum has been the industry's standard
-          dummy text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book. It has survived
-          not only five centuries, but also the leap into electronic
-          typesetting, remaining essentially unchanged. It was popularised in
-          the 1960s with the release of Letraset sheets containing Lorem Ipsum
-          passages, and more recently with desktop publishing software like
-          Aldus PageMaker including versions of Lorem Ipsum.
-        </h3>
-        <h3 style={{ marginTop: "50px", marginBottom:"150px",textAlign:"center",fontWeight:"normal" }}>
-          What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing
-          and typesetting industry. Lorem Ipsum has been the industry's standard
-          dummy text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book. It has survived
-          not only five centuries, but also the leap into electronic
-          typesetting, remaining essentially unchanged. It was popularised in
-          the 1960s with the release of Letraset sheets containing Lorem Ipsum
-          passages, and more recently with desktop publishing software like
-          Aldus PageMaker including versions of Lorem Ipsum.
-        </h3>
+      <div
+        style={{
+          marginTop: "80px",
+          marginLeft: "250px",
+          fontFamily: "sans-serif",
+        }}
+      >
+        <h1
+          style={{
+            textAlign: "center",
+            fontSize: "40px",
+            fontWeight: "bold",
+          }}
+        >
+          Dashboard
+        </h1>
+        <div className={styles.container}>
+          {/* counter for categories */}
+          <div class={styles.card}>
+            <h3 class={styles.cardtitle}>Categories</h3>
+            <div class={styles.counter}>{categories.length}</div>
+          </div>
+          <div class={styles.card}>
+            <h3 class={styles.cardtitle}>Products</h3>
+            <div class={styles.counter}>
+              {/* counter for products */}
+              {products.length}
+            </div>
+          </div>
+        </div>
       </div>
     </RootLayout>
   );

@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from "react";
 import RootLayout from "../../components/layout";
-import styles from "../../styles/category/catcreate.module.css";
+import styles from "../../styles/product/create.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 export default function category() {
   const [data, setData] = useState({});
+  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    getProducts();
     getCategories();
   }, []);
+
+  const getProducts = async () => {
+    axios.get("http://localhost/api/product/index.php").then((res) => {
+      console.log(res.data);
+      setProducts(res.data);
+    });
+  };
 
   const getCategories = async () => {
     axios.get("http://localhost/api/category/index.php").then((res) => {
@@ -25,9 +34,9 @@ export default function category() {
     console.log(data);
 
     //if name already exists in database, do not create
-    const found = categories.find((element) => element.name === data.namee);
+    const found = products.find((element) => element.name === data.name);
     if (found) {
-      toast.error("Category already exists!", {
+      toast.error("Product already exists!", {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
@@ -35,19 +44,19 @@ export default function category() {
 
     try {
       const response = await axios.post(
-        "http://localhost/api/category/index.php",
+        "http://localhost/api/product/index.php",
         data
       );
       console.log(response.data);
-      toast.success("Category created successfully", {
+      toast.success("Product created successfully", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2800,
       });
       // Redirect to login page
-      // window.location.href = "/category";
+      // window.location.href = "/product";
     } catch (error) {
       console.log(error);
-      toast.error("Category creation failed", {
+      toast.error("Product creation failed", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2800,
       });
@@ -64,16 +73,28 @@ export default function category() {
       >
         <ToastContainer />
         <div className={styles.category}>
-          <h1 className={styles.catTitle}>Create New Category</h1>
+          <h1 className={styles.catTitle}>Create New Product</h1>
           <form className={styles.catForm} onSubmit={handleSubmit}>
             <label className={styles.formLabel}>
               <input
                 type="text"
                 required
-                onChange={(e) => setData({ ...data, namee: e.target.value })}
-                name="namee"
+                onChange={(e) => setData({ ...data, name: e.target.value })}
+                name="name"
                 className={styles.inputField}
                 placeholder="Name"
+                minLength={3}
+              />
+            </label>
+            <label className={styles.formLabelPrice}>
+              <span className={styles.rsSymbol}>Rs</span>
+              <input
+                type="number"
+                required
+                onChange={(e) => setData({ ...data, price: e.target.value })}
+                name="price"
+                className={styles.inputField}
+                placeholder="Price"
                 minLength={3}
               />
             </label>
@@ -87,6 +108,31 @@ export default function category() {
                 rows="4"
                 cols="50"
               />
+            </label>
+            {/* display the available categories */}
+            <label className={styles.formLabel}>
+              <select
+                className={styles.inputField}
+                onChange={(e) =>
+                  setData({ ...data, category_id: e.target.value })
+                }
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                <option value="" className={styles.soption}>
+                  Select Category
+                </option>
+                {categories.map((category) => (
+                  <option
+                    key={category.id}
+                    value={category.id}
+                    className={styles.soption}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </label>
             <div className={styles.submitButtonWrapper}>
               <button type="submit" className={styles.submitButton2}>

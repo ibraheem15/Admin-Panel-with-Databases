@@ -51,7 +51,11 @@ export default function sidebar() {
         </ul>
         <ul className={styles.sidebar__list}>
           <li>
-            <span className={styles.list_title} onClick={toggleCategory}>
+            <Link href="/category/read">
+              <span className={styles.list_title}>Category</span>
+            </Link>
+
+            {/* <span className={styles.list_title} onClick={toggleCategory}>
               Category
               <motion.span
                 animate={{ rotate: showCategory ? 180 : 0 }}
@@ -97,21 +101,24 @@ export default function sidebar() {
                     <Link href="/category/create">
                       <li>Create Category</li>
                     </Link>
-                    {/* <Link href="/category/update">
+                    <Link href="/category/update">
                       <li>Update Category</li>
                     </Link>
                     <Link href="/category/delete">
                       <li>Delete Category</li>
-                    </Link> */}
+                    </Link>
                   </motion.div>
                 </motion.ul>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
           </li>
         </ul>
         <ul className={styles.sidebar__list}>
           <li>
-            <span className={styles.list_title} onClick={toggleProduct}>
+            <Link href="/product/read">
+              <span className={styles.list_title}>Product</span>
+            </Link>
+            {/* <span className={styles.list_title} onClick={toggleProduct}>
               Product
               <motion.span
                 animate={{ rotate: showProduct ? 180 : 0 }}
@@ -166,7 +173,7 @@ export default function sidebar() {
                   </motion.div>
                 </motion.ul>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
           </li>
         </ul>
       </div>

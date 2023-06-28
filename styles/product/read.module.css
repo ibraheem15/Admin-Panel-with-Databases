@@ -1,4 +1,4 @@
-.container{
+.container {
   margin-top: 70px;
   margin-left: 250px;
   font-family: sans-serif;
@@ -21,29 +21,58 @@
 }
 
 .card {
-  background-color: #dbdbdb;
+  background-color: #fafafa;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 7px #b4b3b3;
   padding: 20px;
   position: relative;
-    padding-bottom: 2.5rem;
+  padding-bottom: 20px;
 }
 
 .card h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
+  /* font-size: 18px; */
+  font-weight: 600;
+  display: block;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  color: #363636;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.card h3:hover {
+  color: #fbb72c;
+}
+
+.card h4 {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ccc;
+  margin-bottom: 18px;
 }
 
 .card p {
-  font-size: 14px;
-  color: #777777;
+  font-size: 15px;
+  line-height: 22px;
+  margin-bottom: 18px;
+  color: #999;
+}
+
+.price {
+  display: flex;
+  overflow: hidden;
+  border-top: 1px solid #c2c2c2;
+  font-size: 18px;
+  color: #fbb72c;
+  font-weight: 600;
 }
 
 .btnContainer {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  margin-top: 10px;
+  right: 20px;
+  margin-top: 1rem;
 }
 
 .btn {
@@ -85,12 +114,11 @@
     margin-left: 2rem;
     width: 330px;
     /* width: 343px; */
-    
   }
   .cardContainer {
   }
 
-  .title{
+  .title {
     font-size: 1.5rem;
     margin-top: 5.5rem;
     justify-content: center;

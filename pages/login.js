@@ -6,6 +6,7 @@ import styles from "../styles/login.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "../components/layout";
+import Cookies from "js-cookie";
 
 // async function loginUser(credentials) {
 //   return fetch("http://localhost:8080/login", {
@@ -17,7 +18,7 @@ import RootLayout from "../components/layout";
 //   }).then((data) => data.json());
 // }
 
-export default function Login({ setToken }) {
+export default function Login() {
   // const [username, setUsername] = useState();
   // const [password, setPassword] = useState();
 
@@ -40,23 +41,29 @@ export default function Login({ setToken }) {
   }, []);
 
   const getusers = async () => {
-    axios.get("http://localhost/api/user/index.php").then((res) => {
-      // console.log(res.data);
-      setUsers(res.data);
-    });
+    axios
+      .get("http://localhost/api/user/index.php", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("user")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setUsers(res.data);
+      });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const user = users.find(
-      (user) =>
-        // user.username === data.username && user.password === data.password
-        user.email === data.email && user.password === data.password
+      (user) => user.email === data.email && user.password === data.password
     );
 
     if (user) {
-      console.log("Match");
+      //set cookie
+      Cookies.set("user", JSON.stringify(user), { expires: 1 });
+      console.log(user);
       //show toast message
       toast.success("Login Successful", {
         position: toast.POSITION.TOP_RIGHT,

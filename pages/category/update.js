@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../components/layout";
-import styles from "../../styles/catupdate.module.css";
+import styles from "../../styles/category/catupdate.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
