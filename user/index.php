@@ -11,6 +11,12 @@ $conn = $db->connect();
 $data = json_decode(file_get_contents("php://input"));
 print_r($data);
 
+//get cookie data
+// $userCookie = json_decode($_COOKIE['user'], true);
+// // $userCookie = $_COOKIE['user'];
+// // $user = json_decode($userCookie);
+// print_r($userCookie);
+
 //insert data into database
 $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
