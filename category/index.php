@@ -6,6 +6,9 @@ header("Access-Control-Allow-Methods: *");
 
 // include 'DBConnect.php';
 include '../DBConnect.php';
+require __DIR__ . '../../vendor/autoload.php'; // include Composer's autoloader (for rachet websocket)
+
+
 
 $db = new DbConnect;
 $conn = $db->connect();
@@ -73,7 +76,7 @@ switch ($method) {
         // }
 
         // $stmt->execute();
-        
+
         $data = json_decode(file_get_contents("php://input"));
         $id = $_GET['id'];
         $name =  $data->name;
