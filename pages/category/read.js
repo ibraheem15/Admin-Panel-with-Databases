@@ -6,23 +6,74 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { Table, Column, HeaderCell, Cell } from "rsuite-table";
+import Cookies from "js-cookie";
 // import "rsuite-table/lib/less/index.less"; // or
 import "rsuite-table/dist/css/rsuite-table.css";
 import Link from "next/dist/client/link";
 
+//notification handle
+import io from "socket.io-client";
+
 export default function read() {
   const [categories, setcategories] = useState([]);
   const router = useRouter();
+  const [socket, setSocket] = useState(null);
+  const [user, setUser] = useState({
+    id: "",
+    username: "",
+    email: "",
+    password: "",
+    mobile: "",
+  });
+
+  //notification
 
   useEffect(() => {
+    if (socket === null) {
+      const newSocket = io("http://localhost:8010");
+      setSocket(newSocket);
+    }
+
+    if (socket) {
+      socket.on("categoryAdded", (category) => {
+        console.log("category added", category);
+        toast.success("New category added!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
+
+      socket.once("categoryUpdated", (category) => {
+        console.log("category updated", category);
+        toast.info("Category updated!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
+
+      socket.on("categoryDeleted", (category) => {
+        console.log("category deleted", category);
+        toast.warning("Category deleted!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
+    }
+
     getcategories();
-  }, []);
+    getUser();
+  }, [socket]);
 
   const getcategories = async () => {
     axios.get("http://localhost/api/category/index.php").then((res) => {
       console.log(res.data);
       setcategories(res.data);
     });
+  };
+
+  const getUser = () => {
+    const user = Cookies.get("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+    console.log(user);
   };
 
   function handleEdit(e, id, name, description) {
@@ -40,11 +91,21 @@ export default function read() {
       axios
         .delete("http://localhost/api/category/index.php?id=" + id)
         .then((res) => {
-          console.log(res.data);
-          toast.warning("Category deleted successfully!", {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+          //notification
+          // const socket = io("http://localhost:8010");
+          socket.emit("deleteCategory", res.data);
           getcategories();
+        });
+
+      //notification in database
+      axios
+        .post("http://localhost/api/notifications/index.php", {
+          user_id: user.id,
+          message: "Category deleted",
+          created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+        })
+        .then((res) => {
+          console.log(res.data);
         });
     } catch (err) {
       console.log(err);
@@ -57,7 +118,7 @@ export default function read() {
   return (
     <RootLayout>
       <div className={styles.container}>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <div className={styles.title}>
           <h1>All Categories</h1>
         </div>
@@ -153,8 +214,9 @@ export default function read() {
               marginLeft: "10px",
               fontSize: "20px",
             }}
-
-          >Add Category</span>
+          >
+            Add Category
+          </span>
         </div>
         <Table
           height={400}

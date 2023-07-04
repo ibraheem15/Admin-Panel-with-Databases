@@ -12,6 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/x-data-grid": "^6.9.1",
     "axios": "^1.4.0",
     "framer-motion": "^6.5.1",
     "js-cookie": "^3.0.5",
@@ -21,9 +24,13 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.13.0",
     "react-toastify": "^9.1.3",
-    "rsuite-table": "^5.10.6"
+    "rsuite-table": "^5.10.6",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "tls": "^0.0.1"
   },
   "devDependencies": {
+    "@types/socket.io": "^3.0.2",
     "autoprefixer": "^10.4.14",
     "cors": "^2.8.5",
     "express": "^4.18.2",

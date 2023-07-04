@@ -4,18 +4,39 @@ import styles from "../../styles/category/catcreate.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Cookies from "js-cookie";
+//notification imports
+import * as io from "socket.io-client";
 
 export default function category() {
   const [data, setData] = useState({});
   const [categories, setCategories] = useState([]);
+  const [user, setUser] = useState({
+    id: "",
+    username: "",
+    email: "",
+    password: "",
+    mobile: "",
+  });
+
 
   useEffect(() => {
     getCategories();
+    getUser();
+    // notification
   }, []);
+
+  const getUser = () => {
+    const user = Cookies.get("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+    console.log(user);
+  };
 
   const getCategories = async () => {
     axios.get("http://localhost/api/category/index.php").then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setCategories(res.data);
     });
   };
@@ -39,12 +60,23 @@ export default function category() {
         data
       );
       console.log(response.data);
-      toast.success("Category created successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2800,
-      });
-      // Redirect to login page
-      // window.location.href = "/category";
+    
+      const socket = io("localhost:8010");
+      socket.emit("newCategory", response.data);
+      setData({});
+
+      //add notification to database
+      const notification = {
+        user_id: user.id,
+        message: "New Category Created",
+        created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      };
+
+      const response2 = await axios.post(
+        "http://localhost/api/notifications/index.php",
+        notification
+      );
+      console.log(notification);
     } catch (error) {
       console.log(error);
       toast.error("Category creation failed", {

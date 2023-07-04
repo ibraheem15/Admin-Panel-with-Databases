@@ -5,18 +5,18 @@ import RootLayout from "../components/layout";
 import styles from "../styles/index.module.css";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useRouter } from "next/dist/client/router";
 
 function index() {
   const [token, setToken] = useState();
   const [categories, setcategories] = useState([]);
   const [products, setproducts] = useState([]);
-
-  
+  const router = useRouter();
 
   useEffect(() => {
     const token = Cookies.get("user");
-    if(!token) {
-      window.location.href = "/login";
+    if (!token) {
+      router.push("/login");
     }
 
     getcategories();

@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
       {page === "/login" || page === "/register" ? null : <Sidebar />}
 
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

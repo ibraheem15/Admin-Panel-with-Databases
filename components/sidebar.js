@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/sidebar.module.css";
 // framer
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+//notification imports
+import * as io from "socket.io-client";
+import axios from "axios";
 
 export default function sidebar() {
   const [showProduct, setShowProduct] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [Notifications, setNotifications] = useState([]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -20,6 +25,17 @@ export default function sidebar() {
   const toggleCategory = () => {
     setShowCategory(!showCategory);
   };
+
+  const toggleNotification = () => {
+    setShowNotification(!showNotification);
+  };
+
+  useEffect(() => {
+    axios.get("http://localhost/api/notifications/index.php").then((res) => {
+      console.log(res.data);
+      setNotifications(res.data);
+    });
+  }, []);
 
   return (
     // <div className={styles.sidebar}>
@@ -174,6 +190,16 @@ export default function sidebar() {
                 </motion.ul>
               )}
             </AnimatePresence> */}
+          </li>
+        </ul>
+        <ul className={styles.sidebar__list}>
+          <li>
+            <span className={styles.list_title} onClick={toggleNotification}>
+              <Link href="/notification/read">Notification</Link>
+              <span className={styles.notification_count}>
+                {Notifications.length}
+              </span>
+            </span>
           </li>
         </ul>
       </div>

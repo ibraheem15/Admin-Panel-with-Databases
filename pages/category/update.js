@@ -4,40 +4,62 @@ import RootLayout from "../../components/layout";
 import styles from "../../styles/category/catupdate.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
+//notification imports
+import * as io from "socket.io-client";
 
 export default function update() {
   const [data, setData] = useState({});
   const [categories, setCategories] = useState([]);
+  // const socket = io("http://localhost:8010");
+  const [socket, setSocket] = useState(null);
+  const [user, setUser] = useState({
+    id: "",
+    username: "",
+    email: "",
+    password: "",
+    mobile: "",
+  });
 
   useEffect(() => {
+
+    if (socket===null) {
+      const newSocket = io("http://localhost:8010");
+      setSocket(newSocket);
+    }
+   
     getCategory();
+    getUser();
     //get all data from api and then filter it by id
     axios.get("http://localhost/api/category/index.php").then((res) => {
-      console.log(res.data);
       const result = res.data.filter(
         (item) => item.id == window.location.search.split("=")[1].split("&")[0]
       );
-      console.log(result);
       setData({
         id: result[0].id,
         name: result[0].name,
         description: result[0].description,
       });
     });
-
-  }, []);
+  }, [socket]);
 
   const getCategory = async () => {
     try {
-      axios
-        .get("http://localhost/api/category/index.php")
-        .then((res) => {
-          console.log(res.data);
-          setCategories(res.data);
-        });
+      axios.get("http://localhost/api/category/index.php").then((res) => {
+        // console.log(res.data);
+        setCategories(res.data);
+      });
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const getUser = () => {
+    const user = Cookies.get("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+    console.log(user);
   };
 
   const handleUpdate = async (e) => {
@@ -56,11 +78,22 @@ export default function update() {
       axios
         .put("http://localhost/api/category/index.php?id=" + data.id, data)
         .then((res) => {
-          console.log(res.data);
-          toast.success("Category updated successfully!", {
-            position: toast.POSITION.TOP_CENTER,
-          });
+          // console.log(res.data);
+          socket.emit("updateCategory", res.data);
         });
+
+      //notificiation in database
+      axios
+        .post("http://localhost/api/notifications/index.php", {
+          user_id: user.id,
+          message: "Category updated",
+          created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+        })
+        .then((res) => {
+          console.log(res.data);
+          // socket.emit("addNotification", res.data);
+        });
+
     } catch (err) {
       toast.error("Category not updated!", {
         position: toast.POSITION.TOP_CENTER,

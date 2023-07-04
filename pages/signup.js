@@ -5,12 +5,19 @@ import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "../components/layout";
+import Cookies from "js-cookie";
+import { useRouter } from "next/dist/client/router";
 
 function signup() {
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
+    const token = Cookies.get("user");
+    if (token) {
+      router.push("/");
+    }
     getusers();
   }, []);
 

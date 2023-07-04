@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "../components/layout";
 import Cookies from "js-cookie";
+import { useRouter } from "next/dist/client/router";
 
 // async function loginUser(credentials) {
 //   return fetch("http://localhost:8080/login", {
@@ -32,11 +33,16 @@ export default function Login() {
   //   });
   //   setToken(token);
   // };
-
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
+  const router = useRouter();
+  
 
   useEffect(() => {
+    const token = Cookies.get("user");
+    if (token) {
+      router.push("/");
+    }
     getusers();
   }, []);
 
