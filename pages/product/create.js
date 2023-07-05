@@ -61,7 +61,44 @@ export default function category() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
+
+    //form validation
+    if (!data.name || !data.price || !data.category_id) {
+      toast.error("Please fill all the fields!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
+    //name validation
+    if (
+      data.name.length < 3 ||
+      data.name.length > 20 ||
+      !data.name.match(/^[a-zA-Z]+$/)
+    ) {
+      toast.error(
+        "Name must be between 3 to 20 characters and must contain only alphabets!",
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
+
+    //description validation
+    if (
+      data.description.length < 3 ||
+      data.description.length > 100 ||
+      !data.description.match(/^[a-zA-Z]+$/)
+    ) {
+      toast.error(
+        "Description must be between 3 to 100 characters and must contain only alphabets!",
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
 
     //if name already exists in database, do not create
     const found = products.find((element) => element.name === data.name);
@@ -78,7 +115,7 @@ export default function category() {
         data
       );
       console.log(response.data);
-      
+
       socket.emit("newProduct", response.data);
 
       setTimeout(() => {

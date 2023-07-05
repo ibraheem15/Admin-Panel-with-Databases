@@ -50,7 +50,30 @@ export default function category() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
+
+    //check if name is empty or has less than 3 characters or has any special characters
+    if (
+      data.namee === "" ||
+      data.namee.length < 3 ||
+      !data.namee.match(/^[a-zA-Z ]*$/)
+    ) {
+      toast.error("Invalid Category Name!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
+    //check if description is empty or has less than 3 characters or has any special characters
+    if (
+      data.description === "" ||
+      data.description.length < 3 ||
+      !data.description.match(/^[a-zA-Z ]*$/)
+    ) {
+      toast.error("Invalid Category Description!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
 
     //if name already exists in database, do not create
     const found = categories.find((element) => element.name === data.namee);

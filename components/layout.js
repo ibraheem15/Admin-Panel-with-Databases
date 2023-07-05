@@ -4,6 +4,7 @@ import Footer from "./footer";
 import Sidebar from "./sidebar";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
+import { ReduxProvider } from "../redux/provider";
 
 export const metadata = {
   title: "Create Next App",
@@ -16,13 +17,14 @@ export default function RootLayout({ children }) {
 
   return (
     <div>
-      <Nav />
-      {/* <Sidebar /> */}
-      {/* if page is login or register then dont show sidebar else show it */}
-      {page === "/login" || page === "/register" ? null : <Sidebar />}
-
-      {children}
-      {/* <Footer /> */}
+      <ReduxProvider>
+        <Nav />
+        {/* <Sidebar /> */}
+        {/* if page is login or register then dont show sidebar else show it */}
+        {page === "/login" || page === "/register" ? null : <Sidebar />}
+        {children}
+        {/* <Footer /> */}
+      </ReduxProvider>
     </div>
   );
 }

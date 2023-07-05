@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
+import { useSelector } from "react-redux";
 
 export function SignoutButton() {
   const router = useRouter();
@@ -43,22 +44,27 @@ export default function Nav() {
     setIsNavOpen(!isNavOpen);
   };
 
-  const getUser = async () => {
-    const user = await Cookies.get("user");
-    if (user) {
-      setUser(JSON.parse(user));
-    }
-  };
+  const userRedux = useSelector((state) => state.auth);
+
+
+  // const getUser = async () => {
+  //   const user = await Cookies.get("user");
+  //   if (user) {
+  //     setUser(JSON.parse(user));
+  //   }
+  // };
 
   useEffect(() => {
-    getUser();
+    // getUser();
+    // console.log(userRedux);
+    userRedux && setUser(userRedux);
+    console.log(userRedux);
   }, []);
 
   return (
     <nav className={styles.navbar_container}>
       <div>
         <Link href="/">
-          {/* <a className={styles.logo_container}>Logo</a> */}
           <img
             width="50"
             height="50"
@@ -99,18 +105,9 @@ export default function Nav() {
               Sign Out
             </a>
           </Link> */}
-          {/* wait for 3 seconds then go to next page */}
-          {/* if navbar in login or register dont show this button */}
-
-          {/* <button className={styles.button} onClick={handleSIgnOut}>
-            Sign Out
-          </button> */}
-          <span className={styles.button1}>Welcome, {user.username}</span>
+          <span className={styles.button1}>Welcome, {userRedux.username}</span>
           <SignoutButton />
 
-          {/* <Link href="/signup">
-            <a className={styles.button}>Register</a>
-          </Link> */}
         </div>
       </ul>
     </nav>

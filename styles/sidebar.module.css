@@ -47,6 +47,16 @@
   border-radius: 0.55rem;
 }
 
+.list_title_active {
+  display: flex;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.55rem;
+  background-color: #eee;
+}
+
 .list_title:hover {
   background-color: #eee;
 }
@@ -54,6 +64,17 @@
 .list_title a {
   text-decoration: none;
   color: #151515;
+}
+
+.list_title_icon {
+  /* make icon smaller */
+  margin-right: 0.5rem;
+  margin-top: 2px;
+}
+
+.list_title_iconn {
+  /* make icon smaller */
+  padding: 0.3rem 0.3rem;
 }
 
 .list_inner {
@@ -134,22 +155,21 @@
     top: 70px;
   }
 
-  .sidebar__title{
+  .sidebar__title {
     display: none;
   }
   .bars {
     display: block;
-    transition: all 0.3s; 
+    transition: all 0.3s;
     margin-left: 190px;
   }
 
-  .bars_active{
+  .bars_active {
     /* goes to max right side */
     position: absolute;
     right: 0;
-    margin-right: 10px;   
-    transition: all 0.3s; 
-
+    margin-right: 10px;
+    transition: all 0.3s;
   }
 
   .sidebar__content {

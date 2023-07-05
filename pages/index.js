@@ -61,14 +61,56 @@ function index() {
         <div className={styles.container}>
           {/* counter for categories */}
           <div class={styles.card}>
-            <h3 class={styles.cardtitle}>Categories</h3>
-            <div class={styles.counter}>{categories.length}</div>
+            <div class={styles.count}>
+              <h3 class={styles.cardtitle}>Total Categories</h3>
+              <div class={styles.counter}>{categories.length}</div>
+            </div>
+            {/* Recentyl Created Categories count */}
+            <div class={styles.count1}>
+              <h3 class={styles.cardtitle}>Recently Created Categories</h3>
+              <div class={styles.counter1}>
+                {/* if category is created withing week than show it */}
+                {
+                  categories.filter((category) => {
+                    const date = new Date(category.created_at);
+                    const today = new Date();
+                    const diffTime = Math.abs(today - date);
+                    const diffDays = Math.ceil(
+                      diffTime / (1000 * 60 * 60 * 24)
+                    );
+                    if (diffDays <= 7) {
+                      return category;
+                    }
+                  }).length
+                }
+              </div>
+            </div>
           </div>
           <div class={styles.card}>
-            <h3 class={styles.cardtitle}>Products</h3>
-            <div class={styles.counter}>
-              {/* counter for products */}
-              {products.length}
+            <div class={styles.count}>
+              <h3 class={styles.cardtitle}>Total Products</h3>
+              <div class={styles.counter}>{products.length}</div>
+            </div>
+
+            {/* Recently Created Products count */}
+            <div class={styles.count1}>
+              <h3 class={styles.cardtitle}>Recently Created Products</h3>
+              <div class={styles.counter1}>
+                {/* if product is created withing week than show it */}
+                {
+                  products.filter((product) => {
+                    const date = new Date(product.created_at);
+                    const today = new Date();
+                    const diffTime = Math.abs(today - date);
+                    const diffDays = Math.ceil(
+                      diffTime / (1000 * 60 * 60 * 24)
+                    );
+                    if (diffDays <= 7) {
+                      return product;
+                    }
+                  }).length
+                }
+              </div>
             </div>
           </div>
         </div>

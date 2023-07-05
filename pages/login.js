@@ -9,35 +9,16 @@ import RootLayout from "../components/layout";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
 import { route } from "next/dist/server/router";
-
-// async function loginUser(credentials) {
-//   return fetch("http://localhost:8080/login", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(credentials),
-//   }).then((data) => data.json());
-// }
+import { useDispatch,useSelector } from "react-redux";
+import authSlice, { logIn, logOut } from "../redux/features/authSlice";
 
 export default function Login() {
-  // const [username, setUsername] = useState();
-  // const [password, setPassword] = useState();
-
-  // const handleSubmit = async (e) => {
-  //   if (username === undefined || password === undefined)
-  //     return alert("Please fill in all fields");
-  //   e.preventDefault();
-  //   const token = await loginUser({
-  //     username,
-  //     password,
-  //   });
-  //   setToken(token);
-  // };
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
   const router = useRouter();
-  
+  const dispatch = useDispatch();
+  // const auth = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     const token = Cookies.get("user");
@@ -63,12 +44,41 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    //form validation
+    if (data.email === undefined || data.password === undefined)
+      return alert("Please fill in all fields");
+
+    //check if email is valid
+    if (
+      !data.email.match(
+        /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,4})+$/
+      )
+    )
+      return alert("Please enter a valid email address");
+
+    //check if password is valid
+    if (data.password.length < 6)
+      return alert("Password must be at least 6 characters");
+
+    //password must contain at least one number and one letter and one special character
+    if (
+      !data.password.match(
+        /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/
+      )
+    )
+      return alert(
+        "Password must contain at least one number and one letter and one special character"
+      );
+
+    //check if user exists
     const user = users.find(
       (user) => user.email === data.email && user.password === data.password
     );
 
     if (user) {
-      //set cookie
+      dispatch(logIn(user));
+
+      // set cookie
       Cookies.set("user", JSON.stringify(user), { expires: 1 });
       console.log(user);
       //show toast message
@@ -98,6 +108,9 @@ export default function Login() {
         <ToastContainer />
         <div className={styles.login}>
           <h1 className={styles.loginTitle}>Please Log In</h1>
+          {/* <h1 className={styles.loginTitle}>
+            {auth.username ? auth.username : ""}
+          </h1> */}
           <form className={styles.loginForm} onSubmit={handleSubmit}>
             <label className={styles.formLabel}>
               <input
@@ -107,9 +120,9 @@ export default function Login() {
                 name="email"
                 className={styles.inputField}
                 placeholder="Email"
-                pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                // pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                 minLength={3}
-                title="Please enter a valid email address e.g. abc@abc.com"
+                // title="Please enter a valid email address e.g. abc@abc.com"
               />
             </label>
             <label className={styles.formLabel}>
@@ -119,8 +132,8 @@ export default function Login() {
                 onChange={(e) => setData({ ...data, password: e.target.value })}
                 required
                 placeholder="Password"
-                pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
-                title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
+                // pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
+                // title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
               />
             </label>
             <div className={styles.submitButtonWrapper}>

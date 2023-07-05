@@ -6,6 +6,7 @@ import Link from "next/link";
 //notification imports
 import * as io from "socket.io-client";
 import axios from "axios";
+import { useRouter } from "next/dist/client/router";
 
 export default function sidebar() {
   const [showProduct, setShowProduct] = useState(false);
@@ -13,6 +14,7 @@ export default function sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [Notifications, setNotifications] = useState([]);
+  const router = useRouter();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -64,14 +66,47 @@ export default function sidebar() {
         <ul className={styles.sidebar__list}>
           <li>
             <Link href="/">
-              <span className={styles.list_title}>Dashboard</span>
+              {/* <span className={styles.list_title}> */}
+              <span
+                className={
+                  router.pathname == "/"
+                    ? styles.list_title_active
+                    : styles.list_title
+                }
+              >
+                Dashboard
+                <span className={styles.list_title_icon}>
+                  <img
+                    width="19"
+                    height="19"
+                    src="https://img.icons8.com/ios/50/performance-macbook.png"
+                    alt="performance-macbook"
+                  />
+                </span>
+              </span>
             </Link>
           </li>
         </ul>
         <ul className={styles.sidebar__list}>
           <li>
             <Link href="/category/read">
-              <span className={styles.list_title}>Category</span>
+              <span
+                className={
+                  router.pathname.startsWith("/category")
+                    ? styles.list_title_active
+                    : styles.list_title
+                }
+              >
+                Category
+                <span className={styles.list_title_icon}>
+                  <img
+                    width="19"
+                    height="19"
+                    src="https://img.icons8.com/ios-filled/50/diversity.png"
+                    alt="diversity"
+                  />
+                </span>
+              </span>
             </Link>
 
             {/* <span className={styles.list_title} onClick={toggleCategory}>
@@ -135,7 +170,23 @@ export default function sidebar() {
         <ul className={styles.sidebar__list}>
           <li>
             <Link href="/product/read">
-              <span className={styles.list_title}>Product</span>
+              <span
+                className={
+                  router.pathname.startsWith("/product")
+                    ? styles.list_title_active
+                    : styles.list_title
+                }
+              >
+                Product
+                <span className={styles.list_title_icon}>
+                  <img
+                    width="19"
+                    height="19"
+                    src="https://img.icons8.com/material-outlined/24/product.png"
+                    alt="product"
+                  />
+                </span>
+              </span>
             </Link>
             {/* <span className={styles.list_title} onClick={toggleProduct}>
               Product
@@ -197,12 +248,45 @@ export default function sidebar() {
         </ul>
         <ul className={styles.sidebar__list}>
           <li>
-            <span className={styles.list_title} onClick={toggleNotification}>
-              <Link href="/notification/read">Notification</Link>
-              <span className={styles.notification_count}>
-                {Notifications.length > 0 ? Notifications.length : null}
+            <Link href="/notification/read">
+              <span
+                className={
+                  router.pathname.startsWith("/notification")
+                    ? styles.list_title_active
+                    : styles.list_title
+                }
+                onClick={toggleNotification}
+              >
+                Notification
+                <span className={styles.list_title_iconn}>
+                  {Notifications.length > 0 ? Notifications.length : null}
+                </span>
               </span>
-            </span>
+            </Link>
+          </li>
+        </ul>
+        <ul className={styles.sidebar__list}>
+          <li>
+            <Link href="/profile">
+              <span
+                className={
+                  router.pathname.startsWith("/profile")
+                    ? styles.list_title_active
+                    : styles.list_title
+                }
+                onClick={toggleNotification}
+              >
+                Profile
+                <span className={styles.list_title_icon}>
+                  <img
+                    width="23"
+                    height="23"
+                    src="https://img.icons8.com/ios/50/user-male-circle--v1.png"
+                    alt="user-male-circle--v1"
+                  />
+                </span>
+              </span>
+            </Link>
           </li>
         </ul>
       </div>
