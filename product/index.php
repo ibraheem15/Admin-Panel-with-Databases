@@ -40,4 +40,33 @@ switch ($method) {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($result);
         break;
+
+    case 'DELETE':
+        $id = $_GET['id'];
+        $stmt = $conn->prepare("DELETE FROM product WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        if ($stmt->execute()) {
+            echo json_encode(array('message' => 'Data deleted successfully'));
+        } else {
+            echo json_encode(array('message' => 'Data deletion failed'));
+        }
+        break;
+    case 'PUT':
+        $data = json_decode(file_get_contents("php://input"));
+        $id = $_GET['id'];
+        $name =  $data->name;
+        $description = $data->description;
+        $price = $data->price;
+        $category_id = $data->category_id;
+
+
+        $stmt = $conn->prepare("UPDATE product SET name = :name,price = :price,description = :description,category_id = :category_id WHERE id= :id");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':category_id',$category_id);
+        $stmt->execute();
+
+        break;
 }

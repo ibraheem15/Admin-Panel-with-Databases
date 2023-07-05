@@ -42,40 +42,6 @@ switch ($method) {
         break;
 
     case 'PUT':
-        // $data = json_decode(file_get_contents("php://input"));
-
-        // // Prepare the base query
-        // $query = "UPDATE category SET name = :name, description = :description";
-
-        // // Check if the ID is provided
-        // if (!empty($data->id)) {
-        //     $query .= " WHERE id = :id";
-        // }
-
-        // // Check if the old name is provided
-        // if (!empty($data->oldname)) {
-        //     if (strpos($query, 'WHERE') === false) {
-        //         $query .= " WHERE name = :oldname";
-        //     } else {
-        //         $query .= " OR name = :oldname";
-        //     }
-        // }
-
-        // $stmt = $conn->prepare($query);
-        // $stmt->bindParam(':name', $data->name);
-        // $stmt->bindParam(':description', $data->description);
-
-        // // Bind ID parameter if provided
-        // if (!empty($data->id)) {
-        //     $stmt->bindParam(':id', $data->id);
-        // }
-
-        // // Bind old name parameter if provided
-        // if (!empty($data->oldname)) {
-        //     $stmt->bindParam(':oldname', $data->oldname);
-        // }
-
-        // $stmt->execute();
 
         $data = json_decode(file_get_contents("php://input"));
         $id = $_GET['id'];
@@ -91,12 +57,13 @@ switch ($method) {
         break;
 
     case 'DELETE':
-        //get id from .delete("http://localhost/api/category/index.php?id=" + id)
         $id = $_GET['id'];
         $stmt = $conn->prepare("DELETE FROM category WHERE id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         break;
+
+        
     default:
         echo "Method not allowed";
         break;
