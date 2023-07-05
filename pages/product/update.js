@@ -6,12 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+
 //notification imports
 import * as io from "socket.io-client";
 
 export default function update() {
   const [data, setData] = useState({});
-  const [categories, setCategories] = useState([]);
+  const [Category, setCategory] = useState([]);
+  const [Products, setProducts] = useState([]);
   // const socket = io("http://localhost:8010");
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useState({
@@ -34,16 +36,19 @@ export default function update() {
     }
 
     getCategory();
+    getProduct();
     getUser();
     //get all data from api and then filter it by id
-    axios.get("http://localhost/api/category/index.php").then((res) => {
+    axios.get("http://localhost/api/product/index.php").then((res) => {
       const result = res.data.filter(
         (item) => item.id == window.location.search.split("=")[1].split("&")[0]
       );
       setData({
         id: result[0].id,
         name: result[0].name,
+        price: result[0].price,
         description: result[0].description,
+        category_id: result[0].category_id,
       });
     });
   }, [socket]);
@@ -52,7 +57,18 @@ export default function update() {
     try {
       axios.get("http://localhost/api/category/index.php").then((res) => {
         // console.log(res.data);
-        setCategories(res.data);
+        setCategory(res.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getProduct = async () => {
+    try {
+      axios.get("http://localhost/api/product/index.php").then((res) => {
+        // console.log(res.data);
+        setProducts(res.data);
       });
     } catch (err) {
       console.log(err);
@@ -70,10 +86,10 @@ export default function update() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const result = categories.filter((item) => item.name == data.name);
+    const result = Products.filter((item) => item.name == data.name);
     console.log(result);
     if (result.length > 0) {
-      toast.error("Category already exists!", {
+      toast.error("Product already exists!", {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
@@ -81,28 +97,28 @@ export default function update() {
 
     try {
       axios
-        .put("http://localhost/api/category/index.php?id=" + data.id, data)
+        .put("http://localhost/api/product/index.php?id=" + data.id, data)
         .then((res) => {
           // console.log(res.data);
-          socket.emit("updateCategory", res.data);
+          socket.emit("updateProduct", res.data);
         });
 
       //notificiation in database
       axios
         .post("http://localhost/api/notifications/index.php", {
           user_id: user.id,
-          message: "Category updated",
+          message: "Product updated",
           created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
         })
         .then((res) => {
           console.log(res.data);
         });
 
-        setTimeout(() => {
-          router.push("/category/read");
-        }, 3000);
+      setTimeout(() => {
+        router.push("/product/read");
+      }, 3000);
     } catch (err) {
-      toast.error("Category not updated!", {
+      toast.error("Product not updated!", {
         position: toast.POSITION.TOP_CENTER,
       });
     }
@@ -118,48 +134,31 @@ export default function update() {
       >
         <ToastContainer />
         <div className={styles.category}>
-          <h1 className={styles.catTitle}>Update Category</h1>
+          <h1 className={styles.catTitle}>Update Product</h1>
           <form className={styles.catForm} onSubmit={handleUpdate}>
-            {/* <label className={styles.formLabel}>
-              <div className={styles.inputWrapper}>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setData({ ...data, oldname: e.target.value })
-                  }
-                  name="oldname"
-                  className={styles.inputField}
-                  placeholder="Old Name"
-                  minLength={3}
-                />
-                <span
-                  className={styles.inputSpan}
-                  style={{
-                    margin: "10px 0px",
-                  }}
-                >
-                  OR
-                </span>
-                <input
-                  type="text"
-                  onChange={(e) => setData({ ...data, id: e.target.value })}
-                  name="id"
-                  className={styles.inputField}
-                  placeholder="Id"
-                  minLength={1}
-                />
-              </div>
-            </label> */}
             <label className={styles.formLabel}>
               <input
                 type="text"
                 required
                 onChange={(e) => setData({ ...data, name: e.target.value })}
-                name="namee"
+                name="name"
                 className={styles.inputField}
-                placeholder="New Name"
+                placeholder="Name"
                 minLength={3}
                 value={data.name}
+              />
+            </label>
+            <label className={styles.formLabelPrice}>
+              <span className={styles.rsSymbol}>Rs</span>
+              <input
+                type="number"
+                required
+                onChange={(e) => setData({ ...data, price: e.target.value })}
+                name="price"
+                className={styles.inputField}
+                placeholder="Price"
+                minLength={3}
+                value={data.price}
               />
             </label>
             <label className={styles.formLabel}>
@@ -169,10 +168,36 @@ export default function update() {
                   setData({ ...data, description: e.target.value })
                 }
                 placeholder="Description"
-                rows="3"
+                rows="4"
                 cols="50"
                 value={data.description}
+                required
               />
+            </label>
+            {/* display the available categories */}
+            <label className={styles.formLabel}>
+              <select
+                className={styles.inputField}
+                onChange={(e) =>
+                  setData({ ...data, category_id: e.target.value })
+                }
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                <option value="" className={styles.soption}>
+                  Select Category
+                </option>
+                {Category.map((product) => (
+                  <option
+                    key={product.id}
+                    value={product.id}
+                    className={styles.soption}
+                  >
+                    {product.name}
+                  </option>
+                ))}
+              </select>
             </label>
             <div className={styles.submitButtonWrapper}>
               <button type="submit" className={styles.submitButton2}>

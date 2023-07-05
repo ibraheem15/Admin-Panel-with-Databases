@@ -4,16 +4,46 @@ import styles from "../../styles/product/create.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Link from "next/dist/client/link";
+import { useRouter } from "next/router";
+import io from "socket.io-client";
 
 export default function category() {
   const [data, setData] = useState({});
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const router = useRouter();
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    if (socket === null) {
+      const newSocket = io("http://localhost:8010");
+      setSocket(newSocket);
+    }
+
+    if (socket) {
+      socket.once("productAdded", (category) => {
+        toast.success("New Product added!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
+
+      socket.once("productUpdated", (category) => {
+        toast.info("Product updated!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
+
+      socket.on("productDeleted", (category) => {
+        toast.warning("Product deleted!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
+    }
+
     getProducts();
     getCategories();
-  }, []);
+  }, [socket]);
 
   const getProducts = async () => {
     axios.get("http://localhost/api/product/index.php").then((res) => {
@@ -48,12 +78,12 @@ export default function category() {
         data
       );
       console.log(response.data);
-      toast.success("Product created successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2800,
-      });
-      // Redirect to login page
-      // window.location.href = "/product";
+      
+      socket.emit("newProduct", response.data);
+
+      setTimeout(() => {
+        router.push("/product/read");
+      }, 3000);
     } catch (error) {
       console.log(error);
       toast.error("Product creation failed", {

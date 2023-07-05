@@ -30,11 +30,14 @@ export default function sidebar() {
     setShowNotification(!showNotification);
   };
 
-  useEffect(() => {
+  const getNotifications = () => {
     axios.get("http://localhost/api/notifications/index.php").then((res) => {
-      console.log(res.data);
       setNotifications(res.data);
     });
+  };
+
+  useEffect(() => {
+    getNotifications();
   }, []);
 
   return (
@@ -197,7 +200,7 @@ export default function sidebar() {
             <span className={styles.list_title} onClick={toggleNotification}>
               <Link href="/notification/read">Notification</Link>
               <span className={styles.notification_count}>
-                {Notifications.length}
+                {Notifications.length > 0 ? Notifications.length : null}
               </span>
             </span>
           </li>

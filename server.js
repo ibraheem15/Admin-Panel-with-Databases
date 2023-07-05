@@ -23,7 +23,8 @@ const server = app.listen(8010, () => {
 const io = socket(server);
 
 io.on("connection", (socket) => {
-  socket.removeAllListeners()
+  socket.removeAllListeners();
+  console.log("Socket ID: " + socket.id);
   socket.on("message", (msg) => {
     console.log("socket working at the backend", msg);
     io.sockets.emit("message", msg);
@@ -44,6 +45,30 @@ io.on("connection", (socket) => {
   // Handle the "deleteCategory" event
   socket.on("deleteCategory", (category) => {
     // Emit the "categoryDeleted" event to all connected clients
-    io.emit("categoryDeleted", category);
+    socket.emit("categoryDeleted", category);
+  });
+
+  //products
+  socket.on("newProduct", (product) => {
+    // Emit the "productAdded" event to all connected clients
+    socket.emit("productAdded", product);
+  });
+
+  // Handle the "updateProduct" event
+  socket.on("updateProduct", (product) => {
+    // Emit the "productUpdated" event to all connected clients
+    io.emit("productUpdated", product);
+  });
+
+  // Handle the "deleteProduct" event
+  socket.on("deleteProduct", (product) => {
+    // Emit the "productDeleted" event to all connected clients
+    socket.emit("productDeleted", product);
+  });
+
+  //disconnect
+  socket.on("disconnect", () => {
+    console.log("disconnet Socket ID: " + socket.id);
+    socket.removeAllListeners();
   });
 });

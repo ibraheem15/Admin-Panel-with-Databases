@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/navbar.module.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -6,23 +6,20 @@ import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
 
-
 export function SignoutButton() {
   const router = useRouter();
 
   const handleSIgnOut = () => {
     //remove token/cookie
     Cookies.remove("user");
-    toast.success("Sign out success");
+    toast.success("Successfully logged out");
     setTimeout(() => {
-      window.location.href = "/login";
+      router.push("/login");
     }, 3000);
   };
 
   if (router.pathname === "/login") return null;
   if (router.pathname === "/register") return null;
-
-
 
   return (
     <button onClick={handleSIgnOut} className={styles.button}>
@@ -33,9 +30,29 @@ export function SignoutButton() {
 
 export default function Nav() {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [user, setUser] = useState({
+    id: "",
+    username: "",
+    email: "",
+    password: "",
+    mobile: "",
+  });
+  const router = useRouter();
+
   const handleToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
+
+  const getUser = async () => {
+    const user = await Cookies.get("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <nav className={styles.navbar_container}>
@@ -88,6 +105,7 @@ export default function Nav() {
           {/* <button className={styles.button} onClick={handleSIgnOut}>
             Sign Out
           </button> */}
+          <span className={styles.button1}>Welcome, {user.username}</span>
           <SignoutButton />
 
           {/* <Link href="/signup">

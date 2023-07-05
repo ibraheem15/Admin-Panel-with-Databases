@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import RootLayout from "../../components/layout";
 import axios from "axios";
 import styles from "../../styles/category/catread.module.css";
+import { useRouter } from "next/router";
+import Link from "next/dist/client/link";
+import Cookies from "js-cookie";
+//* toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
-import { Table, Column, HeaderCell, Cell } from "rsuite-table";
-import Cookies from "js-cookie";
+//* rsuite table
 // import "rsuite-table/lib/less/index.less"; // or
-import "rsuite-table/dist/css/rsuite-table.css";
-import Link from "next/dist/client/link";
+// import { Table, Column, HeaderCell, Cell } from "rsuite-table";
+// import "rsuite-table/dist/css/rsuite-table.css";
+//* mui datagrid
+import { DataGrid } from "@mui/x-data-grid";
 
 //notification handle
 import io from "socket.io-client";
@@ -30,27 +34,30 @@ export default function read() {
 
   useEffect(() => {
     if (socket === null) {
-      const newSocket = io("http://localhost:8010");
+      const newSocket = io("http://localhost:8010", {
+        transports: ["websocket"],
+        upgrade: false,
+      });
       setSocket(newSocket);
     }
 
     if (socket) {
-      socket.on("categoryAdded", (category) => {
-        console.log("category added", category);
+      socket.once("categoryAdded", (category) => {
         toast.success("New category added!", {
           position: toast.POSITION.TOP_CENTER,
         });
       });
+      socket.off("categoryAdded", (category) => {
+        console.log("off");
+      });          
 
       socket.once("categoryUpdated", (category) => {
-        console.log("category updated", category);
         toast.info("Category updated!", {
           position: toast.POSITION.TOP_CENTER,
         });
       });
 
       socket.on("categoryDeleted", (category) => {
-        console.log("category deleted", category);
         toast.warning("Category deleted!", {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -59,6 +66,10 @@ export default function read() {
 
     getcategories();
     getUser();
+
+    return () => {
+      
+    }
   }, [socket]);
 
   const getcategories = async () => {
@@ -85,14 +96,14 @@ export default function read() {
     });
   }
 
-  function handleDelete(e, id) {
-    e.preventDefault();
+  function handleDelete(id) {
+    //id is only the sr no of the table
+    //get id of the category 
+    id = categories[id - 1].id;
     try {
       axios
         .delete("http://localhost/api/category/index.php?id=" + id)
         .then((res) => {
-          //notification
-          // const socket = io("http://localhost:8010");
           socket.emit("deleteCategory", res.data);
           getcategories();
         });
@@ -114,6 +125,63 @@ export default function read() {
       });
     }
   }
+
+  const columns = [
+    { field: "id", headerName: "Category ID", width: 200 },
+    { field: "name", headerName: "Category Name", width: 200 },
+    { field: "description", headerName: "Category Description", width: 200 },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <>
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/pastel-glyph/64/create-new--v2.png"
+              alt="edit"
+              style={{
+                cursor: "pointer",
+              }}
+              className={styles.img1}
+              onClick={() => {
+                let cid = categories[params.row.id - 1].id;
+                router.push({
+                  pathname: "/category/update",
+                  query: {
+                    id: cid,
+                    name: params.row.name,
+                    description: params.row.description,
+                  },
+                });
+              }}
+            />
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/material-rounded/24/filled-trash.png"
+              alt="delete"
+              className={styles.img2}
+              onClick={() => {
+                handleDelete(params.row.id);
+              }}
+            />
+          </>
+        );
+      },
+    },
+  ];
+
+  //rows with id as sr no
+  const rows = categories.map((category, index) => {
+    return {
+      id: index + 1,
+      name: category.name,
+      description: category.description,
+    };
+  });
 
   return (
     <RootLayout>
@@ -206,6 +274,9 @@ export default function read() {
               height="30"
               src="https://img.icons8.com/ios/50/plus-2-math.png"
               alt="plus-2-math"
+              style={{
+                cursor: "pointer",
+              }}
             />
           </Link>
           <span
@@ -218,7 +289,7 @@ export default function read() {
             Add Category
           </span>
         </div>
-        <Table
+        {/* <Table
           height={400}
           width={800}
           data={categories}
@@ -229,7 +300,6 @@ export default function read() {
         >
           <Column width={200} align="center">
             <HeaderCell>Sr No.</HeaderCell>
-            {/* add index of each key */}
             <Cell>
               {(rowData, rowIndex) => {
                 return <span>{rowIndex + 1}</span>;
@@ -294,7 +364,27 @@ export default function read() {
               }}
             </Cell>
           </Column>
-        </Table>
+        </Table> */}
+        {categories.length >0 ? (
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          pageSize={5}
+          checkboxSelection
+          disableSelectionOnClick
+        />
+        ) : (
+          <div className={styles.noProduct}>
+            <img
+              // src="https://callistoindia.com/images/no-products-found.png"
+              src="https://thenounproject.com/api/private/icons/4440881/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"
+              // src="https://png.pngtree.com/png-clipart/20210711/original/pngtree-no-result-search-icon-png-image_6511543.jpg"
+              alt="no-product"
+              width="400"
+              height="400"
+            />
+          </div>
+        )}
       </div>
     </RootLayout>
   );

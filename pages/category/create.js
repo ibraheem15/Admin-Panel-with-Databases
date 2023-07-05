@@ -7,6 +7,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 //notification imports
 import * as io from "socket.io-client";
+import { useRouter } from "next/router";
 
 export default function category() {
   const [data, setData] = useState({});
@@ -18,9 +19,15 @@ export default function category() {
     password: "",
     mobile: "",
   });
-
+  const [socket, setSocket] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
+    if (socket === null) {
+      const newSocket = io("http://localhost:8010");
+      setSocket(newSocket);
+    }
+
     getCategories();
     getUser();
     // notification
@@ -60,8 +67,7 @@ export default function category() {
         data
       );
       console.log(response.data);
-    
-      const socket = io("localhost:8010");
+
       socket.emit("newCategory", response.data);
       setData({});
 
@@ -77,6 +83,10 @@ export default function category() {
         notification
       );
       console.log(notification);
+      //wait for 2 seconds before redirecting
+      setTimeout(() => {
+        router.push("/category");
+      }, 3000);
     } catch (error) {
       console.log(error);
       toast.error("Category creation failed", {
@@ -118,6 +128,7 @@ export default function category() {
                 placeholder="Description"
                 rows="4"
                 cols="50"
+                required
               />
             </label>
             <div className={styles.submitButtonWrapper}>

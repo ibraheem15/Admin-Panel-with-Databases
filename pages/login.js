@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "../components/layout";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
+import { route } from "next/dist/server/router";
 
 // async function loginUser(credentials) {
 //   return fetch("http://localhost:8080/login", {
@@ -78,7 +79,8 @@ export default function Login() {
 
       //wait 3 seconds before redirecting
       setTimeout(() => {
-        window.location.href = "/";
+        // window.location.href = "/";
+        router.push("/");
       }, 3000);
     } else {
       console.log("No Match");
@@ -140,7 +142,3 @@ export default function Login() {
     </RootLayout>
   );
 }
-
-// Login.propTypes = {
-//   setToken: PropTypes.func.isRequired,
-// };
