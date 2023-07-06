@@ -29,10 +29,20 @@ export const auth = createSlice({
         mobile: action.payload.mobile,
       };
     },
+    updateUser: (state, action) => {
+      return {
+        ...state,
+        id: action.payload.id,
+        username: action.payload.username,
+        email: action.payload.email,
+        password: action.payload.password,
+        mobile: action.payload.mobile,
+      };
+    },
   },
 });
 
-export const { logOut, logIn } = auth.actions;
+export const { logOut, logIn,updateUser } = auth.actions;
 
 // export const selectAuth = (state) => state.auth;
 

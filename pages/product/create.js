@@ -7,6 +7,7 @@ import axios from "axios";
 import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
 import io from "socket.io-client";
+import Cookies from "js-cookie";
 
 export default function category() {
   const [data, setData] = useState({});
@@ -117,6 +118,17 @@ export default function category() {
       console.log(response.data);
 
       socket.emit("newProduct", response.data);
+
+      //notificiation in database
+      axios
+        .post("http://localhost/api/notifications/index.php", {
+          user_id: Cookies.get("id"),
+          message: "New Product added",
+          created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
 
       setTimeout(() => {
         router.push("/product/read");

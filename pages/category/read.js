@@ -42,19 +42,29 @@ export default function read() {
     }
 
     if (socket) {
-      socket.once("categoryAdded", (category) => {
+      // socket.once("categoryAdded", (category) => {
+      //   toast.success("New category added!", {
+      //     position: toast.POSITION.TOP_CENTER,
+      //   });
+      // });
+      // socket.off("categoryAdded", (category) => {
+      //   console.log("off");
+      // });    
+      const handleCategoryAdded = (category) => {
         toast.success("New category added!", {
           position: toast.POSITION.TOP_CENTER,
         });
-      });
-      socket.off("categoryAdded", (category) => {
-        console.log("off");
-      });          
+        socket.off("categoryAdded", handleCategoryAdded);
+      };
+      socket.once("categoryAdded", handleCategoryAdded);
 
       socket.once("categoryUpdated", (category) => {
         toast.info("Category updated!", {
           position: toast.POSITION.TOP_CENTER,
         });
+      });
+      socket.off("categoryUpdated", (category) => {
+        console.log("off");
       });
 
       socket.on("categoryDeleted", (category) => {
@@ -68,7 +78,11 @@ export default function read() {
     getUser();
 
     return () => {
-      
+      if (socket) {
+        // socket.off("categoryAdded");
+        // socket.off("categoryUpdated");
+        // socket.off("categoryDeleted");
+      }
     }
   }, [socket]);
 

@@ -89,7 +89,6 @@ export default function Login() {
 
       //wait 3 seconds before redirecting
       setTimeout(() => {
-        // window.location.href = "/";
         router.push("/");
       }, 3000);
     } else {

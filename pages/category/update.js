@@ -98,9 +98,9 @@ export default function update() {
           console.log(res.data);
         });
 
-        setTimeout(() => {
-          router.push("/category/read");
-        }, 3000);
+      setTimeout(() => {
+        router.push("/category/read");
+      }, 3000);
     } catch (err) {
       toast.error("Category not updated!", {
         position: toast.POSITION.TOP_CENTER,
@@ -110,12 +110,7 @@ export default function update() {
 
   return (
     <RootLayout>
-      <div
-        className={styles.container}
-        style={{
-          fontFamily: "sans-serif",
-        }}
-      >
+      <div className={styles.container}>
         <ToastContainer />
         <div className={styles.category}>
           <h1 className={styles.catTitle}>Update Category</h1>

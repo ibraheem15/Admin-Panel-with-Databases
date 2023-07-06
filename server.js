@@ -66,6 +66,11 @@ io.on("connection", (socket) => {
     socket.emit("productDeleted", product);
   });
 
+  socket.on("updateUser", (user) => {
+    // Emit the "userUpdated" event to all connected clients
+    io.emit("userUpdated", user);
+  });
+
   //disconnect
   socket.on("disconnect", () => {
     console.log("disconnet Socket ID: " + socket.id);

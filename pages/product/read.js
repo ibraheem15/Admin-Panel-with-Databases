@@ -10,6 +10,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Link from "next/dist/client/link";
 //notification
 import * as io from "socket.io-client";
+import Cookies from "js-cookie";
 
 export default function read() {
   const [category, setcategory] = useState([]);
@@ -31,12 +32,26 @@ export default function read() {
           position: toast.POSITION.TOP_CENTER,
         });
       });
+      socket.off("productAdded", (category) => {
+        console.log("productAdded");
+      });
 
-      socket.once("productUpdated", (category) => {
+      // socket.once("productUpdated", (category) => {
+      //   toast.info("Product updated!", {
+      //     position: toast.POSITION.TOP_CENTER,
+      //   });
+      // });
+      // socket.off("productUpdated", (category) => {
+      //   console.log("productUpdated");
+      // });
+
+      const handleProductUpdated = (product) => {
         toast.info("Product updated!", {
           position: toast.POSITION.TOP_CENTER,
         });
-      });
+        socket.off("productUpdated", handleProductUpdated);
+      };
+      socket.once("productUpdated", handleProductUpdated);
 
       socket.once("productDeleted", (category) => {
         toast.warning("Product deleted!", {
@@ -47,6 +62,12 @@ export default function read() {
 
     getproducts();
     getcategory();
+
+    return () => {
+      if (socket) {
+        // socket.off("productUpdated");
+      }
+    };
   }, [socket]);
 
   const getproducts = async () => {
@@ -75,6 +96,17 @@ export default function read() {
     } catch (error) {
       console.log(error);
     }
+
+    //notificiation in database
+    axios
+      .post("http://localhost/api/notifications/index.php", {
+        user_id: Cookies.get("id"),
+        message: "Product deleted",
+        created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
   };
 
   const columns = [
