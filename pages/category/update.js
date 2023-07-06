@@ -10,7 +10,11 @@ import { useRouter } from "next/router";
 import * as io from "socket.io-client";
 
 export default function update() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    name: "",
+    description: "",
+  });
+
   const [categories, setCategories] = useState([]);
   // const socket = io("http://localhost:8010");
   const [socket, setSocket] = useState(null);
@@ -21,6 +25,7 @@ export default function update() {
     password: "",
     mobile: "",
   });
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const router = useRouter();
 
@@ -69,6 +74,26 @@ export default function update() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setIsFormSubmitted(true);
+
+    if (!data.name || !data.description) {
+      return;
+    }
+
+    if (data.name.length < 3 || data.description.length < 3) {
+      return;
+    }
+
+    if (data.name.length > 20 || data.description.length > 100) {
+      return;
+    }
+    // !data.namee.match(/^[a-zA-Z ]*$/)) && (
+    if (
+      !data.name.match(/^[a-zA-Z ]*$/) ||
+      !data.description.match(/^[a-zA-Z ]*$/)
+    ) {
+      return;
+    }
 
     const result = categories.filter((item) => item.name == data.name);
     console.log(result);
@@ -156,6 +181,16 @@ export default function update() {
                 minLength={3}
                 value={data.name}
               />
+              {isFormSubmitted &&
+                (data.name === "" ||
+                  data.name.length < 3 ||
+                  data.name.length > 20 ||
+                  data.name.match(/^[a-zA-Z]+$/) == null) && (
+                  <span className={styles.error}>
+                    Name must be between 3 to 20 characters and must not be
+                    contain any special characters or numbers!
+                  </span>
+                )}
             </label>
             <label className={styles.formLabel}>
               <textarea
@@ -168,6 +203,16 @@ export default function update() {
                 cols="50"
                 value={data.description}
               />
+              {isFormSubmitted &&
+                (data.description === "" ||
+                  data.description.length < 3 ||
+                  data.description.length > 100 ||
+                  data.description.match(/^[a-zA-Z]+$/) == null) && (
+                  <span className={styles.error}>
+                    Description must be between 3 to 100 characters and must not
+                    be contain any special characters or numbers!
+                  </span>
+                )}
             </label>
             <div className={styles.submitButtonWrapper}>
               <button type="submit" className={styles.submitButton2}>

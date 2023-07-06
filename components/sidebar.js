@@ -46,7 +46,7 @@ export default function sidebar() {
     // <div className={styles.sidebar}>
     <div className={`${isOpen ? styles.sidebar_active : styles.sidebar}`}>
       <div className={styles.sidebar__header}>
-        <h3 className={styles.sidebar__title}>Sidebar</h3>
+        {/* <h3 className={styles.sidebar__title}>Sidebar</h3> */}
         <div
           className={`${isOpen ? styles.bars_active : styles.bars}`}
           onClick={toggleSidebar}
@@ -74,7 +74,6 @@ export default function sidebar() {
                     : styles.list_title
                 }
               >
-                Dashboard
                 <span className={styles.list_title_icon}>
                   <img
                     width="19"
@@ -83,6 +82,7 @@ export default function sidebar() {
                     alt="performance-macbook"
                   />
                 </span>
+                Dashboard
               </span>
             </Link>
           </li>
@@ -97,7 +97,6 @@ export default function sidebar() {
                     : styles.list_title
                 }
               >
-                Category
                 <span className={styles.list_title_icon}>
                   <img
                     width="19"
@@ -106,6 +105,7 @@ export default function sidebar() {
                     alt="diversity"
                   />
                 </span>
+                Category
               </span>
             </Link>
 
@@ -177,7 +177,6 @@ export default function sidebar() {
                     : styles.list_title
                 }
               >
-                Product
                 <span className={styles.list_title_icon}>
                   <img
                     width="19"
@@ -186,6 +185,7 @@ export default function sidebar() {
                     alt="product"
                   />
                 </span>
+                Product
               </span>
             </Link>
             {/* <span className={styles.list_title} onClick={toggleProduct}>
@@ -252,11 +252,11 @@ export default function sidebar() {
               <span
                 className={
                   router.pathname.startsWith("/notification")
-                    ? styles.list_title_active
-                    : styles.list_title
+                  ? styles.list_title_active
+                  : styles.list_title
                 }
                 onClick={toggleNotification}
-              >
+                >
                 Notification
                 <span className={styles.list_title_iconn}>
                   {Notifications.length > 0 ? Notifications.length : null}
@@ -276,7 +276,6 @@ export default function sidebar() {
                 }
                 onClick={toggleNotification}
               >
-                Profile
                 <span className={styles.list_title_icon}>
                   <img
                     width="23"
@@ -285,6 +284,7 @@ export default function sidebar() {
                     alt="user-male-circle--v1"
                   />
                 </span>
+                Profile
               </span>
             </Link>
           </li>

@@ -115,3 +115,9 @@
   display: flex;
   cursor: pointer;
 }
+
+.noProduct{
+  /* margin-left: 250px; */
+  font-family: sans-serif;
+  font-size: 1.5rem;
+}

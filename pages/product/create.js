@@ -10,11 +10,18 @@ import io from "socket.io-client";
 import Cookies from "js-cookie";
 
 export default function category() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category_id: "",
+  });
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const router = useRouter();
   const [socket, setSocket] = useState(null);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
     if (socket === null) {
@@ -62,12 +69,10 @@ export default function category() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsFormSubmitted(true);
 
     //form validation
     if (!data.name || !data.price || !data.category_id) {
-      toast.error("Please fill all the fields!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
       return;
     }
 
@@ -77,12 +82,6 @@ export default function category() {
       data.name.length > 20 ||
       !data.name.match(/^[a-zA-Z]+$/)
     ) {
-      toast.error(
-        "Name must be between 3 to 20 characters and must contain only alphabets!",
-        {
-          position: toast.POSITION.TOP_CENTER,
-        }
-      );
       return;
     }
 
@@ -92,21 +91,12 @@ export default function category() {
       data.description.length > 100 ||
       !data.description.match(/^[a-zA-Z]+$/)
     ) {
-      toast.error(
-        "Description must be between 3 to 100 characters and must contain only alphabets!",
-        {
-          position: toast.POSITION.TOP_CENTER,
-        }
-      );
       return;
     }
 
     //if name already exists in database, do not create
     const found = products.find((element) => element.name === data.name);
     if (found) {
-      toast.error("Product already exists!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
       return;
     }
 
@@ -164,6 +154,16 @@ export default function category() {
                 placeholder="Name"
                 minLength={3}
               />
+              {isFormSubmitted &&
+                (data.name === "" ||
+                  data.name.length < 3 ||
+                  data.name.length > 20 ||
+                  !data.name.match(/^[a-zA-Z]+$/)) && (
+                  <p className={styles.error}>
+                    Name must be between 3 and 20 characters long and must
+                    contain only alphabets
+                  </p>
+                )}
             </label>
             <label className={styles.formLabelPrice}>
               <span className={styles.rsSymbol}>Rs</span>
@@ -187,6 +187,16 @@ export default function category() {
                 rows="4"
                 cols="50"
               />
+              {isFormSubmitted &&
+                (data.description === "" ||
+                  data.description.length < 3 ||
+                  data.description.length > 100 ||
+                  !data.description.match(/^[a-zA-Z]+$/)) && (
+                  <p className={styles.error}>
+                    Description must be between 3 and 100 characters long and
+                    must contain only alphabets
+                  </p>
+                )}
             </label>
             {/* display the available categories */}
             <label className={styles.formLabel}>

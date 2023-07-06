@@ -31,7 +31,7 @@
 
 .img1 {
   cursor: pointer;
-  background-color: rgba(0, 0, 255, 0.531);
+  /* background-color: rgba(0, 0, 255, 0.531); */
   border-radius: 10%;
   margin: 1%;
   padding: 1%;
@@ -39,9 +39,14 @@
 
 .img2 {
   cursor: pointer;
-  background-color: rgba(255, 0, 0, 0.531);
+  /* background-color: rgba(255, 0, 0, 0.531); */
   border-radius: 10%;
   margin: 1%;
   margin-left: 6%;
   padding: 1%;
+}
+
+.noProduct{
+  font-family: sans-serif;
+  margin-top: -3rem;
 }

@@ -10,7 +10,10 @@ import * as io from "socket.io-client";
 import { useRouter } from "next/router";
 
 export default function category() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    namee: "",
+    description: "",
+  });
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState({
     id: "",
@@ -21,6 +24,7 @@ export default function category() {
   });
   const [socket, setSocket] = useState(null);
   const router = useRouter();
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
     if (socket === null) {
@@ -50,6 +54,7 @@ export default function category() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsFormSubmitted(true);
 
     //check if name is empty or has less than 3 characters or has any special characters
     if (
@@ -57,9 +62,10 @@ export default function category() {
       data.namee.length < 3 ||
       !data.namee.match(/^[a-zA-Z ]*$/)
     ) {
-      toast.error("Invalid Category Name!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
+      // toast.error("Invalid Category Name!", {
+      //   position: toast.POSITION.TOP_CENTER,
+      // });
+      // setIsFormSubmitted(false);
       return;
     }
 
@@ -69,9 +75,7 @@ export default function category() {
       data.description.length < 3 ||
       !data.description.match(/^[a-zA-Z ]*$/)
     ) {
-      toast.error("Invalid Category Description!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
+      // show error message below description field without toast
       return;
     }
 
@@ -134,13 +138,20 @@ export default function category() {
             <label className={styles.formLabel}>
               <input
                 type="text"
-                required
                 onChange={(e) => setData({ ...data, namee: e.target.value })}
                 name="namee"
                 className={styles.inputField}
                 placeholder="Name"
                 minLength={3}
               />
+              {isFormSubmitted &&
+                (data.namee === "" ||
+                  data.namee.length < 3 ||
+                  !data.namee.match(/^[a-zA-Z ]*$/)) && (
+                  <p className={styles.error}>
+                    Invalid category name. Please enter a valid category name.
+                  </p>
+                )}
             </label>
             <label className={styles.formLabel}>
               <textarea
@@ -151,9 +162,17 @@ export default function category() {
                 placeholder="Description"
                 rows="4"
                 cols="50"
-                required
               />
+              {isFormSubmitted &&
+                (data.description === "" ||
+                  data.description.length < 3 ||
+                  !data.description.match(/^[a-zA-Z ]*$/)) && (
+                  <p className={styles.error}>
+                    Invalid description. Please enter a valid description.
+                  </p>
+                )}
             </label>
+            {/* show error message of description field */}
             <div className={styles.submitButtonWrapper}>
               <button type="submit" className={styles.submitButton2}>
                 Create

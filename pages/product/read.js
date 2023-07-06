@@ -165,7 +165,7 @@ export default function read() {
             <img
               width="30"
               height="30"
-              src="https://img.icons8.com/material-rounded/24/filled-trash.png"
+              src="https://img.icons8.com/material-rounded/60/filled-trash.png"
               alt="delete"
               className={styles.img2}
               onClick={() => deleteproduct(params.row.id)}
@@ -234,6 +234,12 @@ export default function read() {
               width="400"
               height="400"
             />
+             <h1
+              style={{
+                marginLeft: "50px",	
+                marginTop: "-30px",
+              }}
+            >No Products Found</h1>
           </div>
         )}
       </div>

@@ -108,3 +108,10 @@
   margin-right: 5px;
   font-weight: 600;
 }
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0rem;
+}

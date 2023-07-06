@@ -43,7 +43,7 @@
   cursor: pointer;
   padding: 0.5rem 1rem;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   border-radius: 0.55rem;
 }
 
@@ -52,7 +52,7 @@
   cursor: pointer;
   padding: 0.5rem 1rem;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   border-radius: 0.55rem;
   background-color: #eee;
 }

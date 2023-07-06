@@ -175,7 +175,7 @@ export default function read() {
             <img
               width="30"
               height="30"
-              src="https://img.icons8.com/material-rounded/24/filled-trash.png"
+              src="https://img.icons8.com/material-rounded/65/filled-trash.png"
               alt="delete"
               className={styles.img2}
               onClick={() => {
@@ -397,6 +397,12 @@ export default function read() {
               width="400"
               height="400"
             />
+            <h1
+              style={{
+                marginLeft: "30px",	
+                marginTop: "-20px",
+              }}
+            >No Categories Found</h1>
           </div>
         )}
       </div>

@@ -11,7 +11,12 @@ import { useRouter } from "next/router";
 import * as io from "socket.io-client";
 
 export default function update() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category_id: "",
+  });
   const [Category, setCategory] = useState([]);
   const [Products, setProducts] = useState([]);
   // const socket = io("http://localhost:8010");
@@ -85,6 +90,7 @@ export default function update() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setIsFormSubmitted(true);
 
     const result = Products.filter((item) => item.name == data.name);
     console.log(result);
@@ -147,6 +153,16 @@ export default function update() {
                 minLength={3}
                 value={data.name}
               />
+              {isFormSubmitted &&
+                (data.name === "" ||
+                  data.name.length < 3 ||
+                  data.name.length > 20 ||
+                  data.name.match(/^[a-zA-Z0-9 ]*$/)) && (
+                  <span className={styles.error}>
+                    Name must be between 3 to 20 characters and must not contain
+                    special characters
+                  </span>
+                )}
             </label>
             <label className={styles.formLabelPrice}>
               <span className={styles.rsSymbol}>Rs</span>
@@ -160,7 +176,18 @@ export default function update() {
                 minLength={3}
                 value={data.price}
               />
+              {isFormSubmitted &&
+                (data.price === "" ||
+                  data.price.length < 3 ||
+                  data.price.length > 20 ||
+                  data.price.match(/^[a-zA-Z0-9 ]*$/)) && (
+                  <span className={styles.error}>
+                    Price must be between 3 to 20 characters and must not
+                    contain special characters
+                  </span>
+                )}
             </label>
+
             <label className={styles.formLabel}>
               <textarea
                 className={styles.inputField}
@@ -173,6 +200,16 @@ export default function update() {
                 value={data.description}
                 required
               />
+              {isFormSubmitted &&
+                (data.description === "" ||
+                  data.description.length < 3 ||
+                  data.description.length > 20 ||
+                  data.description.match(/^[a-zA-Z0-9 ]*$/)) && (
+                  <span className={styles.error}>
+                    Description must be between 3 to 20 characters and must not
+                    contain special characters
+                  </span>
+                )}
             </label>
             {/* display the available categories */}
             <label className={styles.formLabel}>
