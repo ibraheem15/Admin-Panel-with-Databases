@@ -27,9 +27,11 @@ export default function profile() {
   const router = useRouter();
   const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
+  const [isformsubmitted, setisformsubmitted] = useState(false);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setisformsubmitted(true);
 
     //form validation
     if (
@@ -38,25 +40,21 @@ export default function profile() {
       data.password === undefined ||
       data.mobile === undefined
     )
-      return alert("Please fill in all fields");
-
+      return;
     //check if email is valid
     if (
       !data.email.match(
         /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,4})+$/
       )
     )
-      return alert("Please enter a valid email address");
-
+      return;
     //check if password is valid
-    if (data.password.length < 6)
-      return alert("Password must be at least 6 characters");
-
+    if (data.password.length < 6) return;
     //check if mobile is valid with numbers only
-    if (!data.mobile.match(/^[0-9]+$/)) return alert("Mobile must be numbers");
+    if (!data.mobile.match(/^[0-9]+$/)) return;
 
     //check if mobile is valid with 11 numbers
-    if (data.mobile.length !== 11) return alert("Mobile must be 11 numbers");
+    if (data.mobile.length !== 11) return;
 
     //password validation
     if (
@@ -64,9 +62,7 @@ export default function profile() {
         /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/
       )
     )
-      return alert(
-        "Password must contain at least one letter, one number and one special character"
-      );
+      return;
 
     //update user on redux
     dispatch(
@@ -105,13 +101,32 @@ export default function profile() {
 
   const getUser = async () => {
     console.log(user);
-    setData({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      password: user.password,
-      mobile: user.mobile,
-    });
+
+    if (user.id !== null) {
+      //get user from cookies
+      setData({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        mobile: user.mobile,
+      });
+    } else {
+      const cookuser = Cookies.get("user");
+      if (cookuser) {
+        const user = JSON.parse(cookuser);
+        console.log(user);
+        dispatch(
+          logIn({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            mobile: user.mobile,
+          })
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -165,7 +180,6 @@ export default function profile() {
           Profile
         </h1>
         <div className={styles.category}>
-          {/* <h1 className={styles.catTitle}>Update Profile</h1> */}
           {/* image */}
           <div className={styles.catImage}>
             <img
@@ -192,6 +206,13 @@ export default function profile() {
                 minLength={3}
                 value={data.username}
               />
+              {isformsubmitted &&
+                (data.username === "" ||
+                  data.username.length < 3 ||
+                  data.username.length > 20 ||
+                  !data.username.match(/^[a-zA-Z]+$/)) && (
+                  <span className={styles.error}>Invalid Username</span>
+                )}
             </label>
             <label className={styles.formLabel}>
               <input
@@ -204,11 +225,16 @@ export default function profile() {
                 minLength={3}
                 value={data.email}
               />
+              {isformsubmitted &&
+                (data.email === "" ||
+                  data.email.length < 3 ||
+                  !data.email.match(
+                    /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,})$/
+                  )) && <span className={styles.error}>Invalid Email</span>}
             </label>
             <label className={styles.formLabel}>
               <input
                 type="password"
-                required
                 onChange={(e) => setData({ ...data, password: e.target.value })}
                 name="password"
                 className={styles.inputField}
@@ -216,6 +242,17 @@ export default function profile() {
                 minLength={3}
                 value={data.password}
               />
+              {isformsubmitted &&
+                (data.password === "" ||
+                  data.password.length < 8 ||
+                  !data.password.match(
+                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/
+                  )) && (
+                  <span className={styles.error}>
+                    Password must contain at least 8 characters, including
+                    UPPER/lowercase and numbers and special characters
+                  </span>
+                )}
             </label>
             <label className={styles.formLabel}>
               <input
@@ -228,6 +265,12 @@ export default function profile() {
                 minLength={3}
                 value={data.mobile}
               />
+              {isformsubmitted &&
+                (data.mobile === "" ||
+                  data.mobile.length !== 11 ||
+                  !data.mobile.match(/^[0-9]+$/)) && (
+                  <span className={styles.error}>Invalid Mobile</span>
+                )}
             </label>
             <div className={styles.submitButtonWrapper}>
               <button type="submit" className={styles.submitButton2}>
