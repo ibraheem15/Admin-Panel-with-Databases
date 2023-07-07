@@ -2,6 +2,10 @@
   font-family: "Rubik", sans-serif;
 }
 
+.container {
+  margin-top: 80px;
+}
+
 .category {
   max-width: 400px;
   /* margin: 10rem auto; */
@@ -135,4 +139,32 @@
   font-size: 0.8rem;
   margin-top: 0.5rem;
   margin-bottom: 0rem;
+}
+
+.title{
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 40px;
+  /* margin-right: 5rem; */
+  margin-left: 10rem;
+}
+
+@media screen and (max-width: 730px) {
+  .error {
+    font-size: 0.7rem;
+  }
+  .container {
+    margin-left: 0rem;
+    margin-right: 0rem;
+  }
+  .category {
+    /* max-width: 400px; */
+    margin: 5rem ;
+    margin-top: 3rem;
+    padding: 20px;
+  }
+  .title{
+    margin-left: 3rem;
+    margin-right: 5rem;
+  }
 }

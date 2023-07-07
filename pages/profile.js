@@ -81,7 +81,11 @@ export default function profile() {
         .put("http://localhost/api/user/index.php?id=" + data.id, data)
         .then((res) => {
           console.log(res.data);
-          socket.emit("updateUser", res.data);
+          // socket.emit("updateUser", res.data);
+          toast.success("Profile Updated Successfully", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
         });
     } catch (error) {
       console.log(error);
@@ -166,16 +170,16 @@ export default function profile() {
         className={styles.container}
         style={{
           fontFamily: "sans-serif",
-          marginTop: "80px",
         }}
       >
         <h1
-          style={{
-            textAlign: "center",
-            fontSize: "40px",
-            fontWeight: "bold",
-            marginLeft: "10rem",
-          }}
+          // style={{
+          //   textAlign: "center",
+          //   fontSize: "40px",
+          //   fontWeight: "bold",
+          //   marginLeft: "10rem",
+          // }}
+          className={styles.title}
         >
           Profile
         </h1>
