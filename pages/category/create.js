@@ -28,7 +28,6 @@ export default function category() {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-
     getCategories();
     getUser();
     // notification
@@ -59,7 +58,6 @@ export default function category() {
       data.namee.length < 3 ||
       !data.namee.match(/^[a-zA-Z ]*$/)
     ) {
-   
       return;
     }
 
@@ -88,6 +86,9 @@ export default function category() {
         data
       );
       console.log(response.data);
+      toast.success("Category created successfully!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
 
       socket.emit("newCategory", response.data);
 

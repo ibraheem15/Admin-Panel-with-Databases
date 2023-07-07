@@ -109,6 +109,9 @@ export default function update() {
         .put("http://localhost/api/category/index.php?id=" + data.id, data)
         .then((res) => {
           // console.log(res.data);
+          toast.info("Category updated!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
           socket.emit("updateCategory", res.data);
         });
 

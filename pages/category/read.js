@@ -95,6 +95,9 @@ export default function read() {
       axios
         .delete("http://localhost/api/category/index.php?id=" + id)
         .then((res) => {
+          toast.warning("Category deleted!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
           socket.emit("deleteCategory", res.data);
           getcategories();
         });

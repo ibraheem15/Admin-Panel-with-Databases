@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import { DataGrid } from "@mui/x-data-grid";
 import Link from "next/dist/client/link";
 //notification
-import * as io from "socket.io-client";
+import io from "socket.io-client";
 const sockett = io.connect("http://localhost:8010");
 
 export default function read() {
@@ -20,21 +20,20 @@ export default function read() {
   const [socket, setSocket] = useState(sockett);
 
   useEffect(() => {
-  
     socket.on("productAdded", (category) => {
       toast.success("New Product added!", {
         position: toast.POSITION.TOP_CENTER,
       });
       getproducts();
     });
-  
+
     socket.on("productUpdated", (category) => {
       toast.info("Product updated!", {
         position: toast.POSITION.TOP_CENTER,
       });
       getproducts();
     });
-   
+
     socket.on("productDeleted", (category) => {
       toast.warning("Product deleted!", {
         position: toast.POSITION.TOP_CENTER,
@@ -81,6 +80,9 @@ export default function read() {
     } catch (error) {
       console.log(error);
     }
+    toast.warning("Product deleted!", {
+      position: toast.POSITION.TOP_CENTER,
+    });
 
     //notificiation in database
     axios

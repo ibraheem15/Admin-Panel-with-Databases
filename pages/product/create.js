@@ -8,6 +8,7 @@ import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
 import io from "socket.io-client";
 import Cookies from "js-cookie";
+const socket = io.connect("http://localhost:8010");
 
 export default function category() {
   const [data, setData] = useState({
@@ -20,38 +21,12 @@ export default function category() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const router = useRouter();
-  const [socket, setSocket] = useState(null);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-    if (socket === null) {
-      const newSocket = io("http://localhost:8010");
-      setSocket(newSocket);
-    }
-
-    if (socket) {
-      socket.once("productAdded", (category) => {
-        toast.success("New Product added!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      });
-
-      socket.once("productUpdated", (category) => {
-        toast.info("Product updated!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      });
-
-      socket.on("productDeleted", (category) => {
-        toast.warning("Product deleted!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      });
-    }
-
     getProducts();
     getCategories();
-  }, [socket]);
+  }, []);
 
   const getProducts = async () => {
     axios.get("http://localhost/api/product/index.php").then((res) => {
@@ -106,6 +81,10 @@ export default function category() {
         data
       );
       console.log(response.data);
+      toast.success("Product created successfully", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2800,
+      });
 
       socket.emit("newProduct", response.data);
 

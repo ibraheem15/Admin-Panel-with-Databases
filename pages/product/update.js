@@ -132,6 +132,9 @@ export default function update() {
           // console.log(res.data);
           socket.emit("updateProduct", res.data);
         });
+        toast.info("Product updated!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
 
       //notificiation in database
       axios
@@ -183,8 +186,8 @@ export default function update() {
                   data.name.length > 20 ||
                   !data.name.match(/^[a-zA-Z ]*$/)) && (
                   <span className={styles.error}>
-                    Name must be between 3 to 20 characters and must not contain number or
-                    special characters
+                    Name must be between 3 to 20 characters and must not contain
+                    number or special characters
                   </span>
                 )}
             </label>
