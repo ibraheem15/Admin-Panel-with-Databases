@@ -17,11 +17,11 @@ import { DataGrid } from "@mui/x-data-grid";
 
 //notification handle
 import io from "socket.io-client";
+const sockett = io.connect("http://localhost:8010");
 
 export default function read() {
   const [categories, setcategories] = useState([]);
   const router = useRouter();
-  const [socket, setSocket] = useState(null);
   const [user, setUser] = useState({
     id: "",
     username: "",
@@ -29,61 +29,84 @@ export default function read() {
     password: "",
     mobile: "",
   });
+  const [socket, setSocket] = useState(sockett);
+  // const [socket, setSocket] = useState(null);
+  // const socket = io("http://localhost:8010", {
+  //   transports: ["websocket"],
+  //   upgrade: false,
+  // });
+  // socket.on("connection", () => {
+  //   console.log("connected");
+  // });
+
+  // socket.on("categoryAdded", () => {
+  //   toast.success("New category added!", {
+  //     position: toast.POSITION.TOP_CENTER,
+  //   });
+  // });
 
   //notification
 
   useEffect(() => {
-    if (socket === null) {
-      const newSocket = io("http://localhost:8010", {
-        transports: ["websocket"],
-        upgrade: false,
-      });
-      setSocket(newSocket);
-    }
+    // if (sockett === null) {
+    //   const newSocket = io.connect("http://localhost:8010");
+    //   setSocket(newSocket);
+    // }
 
-    if (socket) {
-      // socket.once("categoryAdded", (category) => {
-      //   toast.success("New category added!", {
-      //     position: toast.POSITION.TOP_CENTER,
-      //   });
-      // });
-      // socket.off("categoryAdded", (category) => {
-      //   console.log("off");
-      // });    
-      const handleCategoryAdded = (category) => {
-        toast.success("New category added!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        socket.off("categoryAdded", handleCategoryAdded);
-      };
-      socket.once("categoryAdded", handleCategoryAdded);
+    // if (sockett) {
+    //   // socket.once("categoryAdded", (category) => {
+    //   //   toast.success("New category added!", {
+    //   //     position: toast.POSITION.TOP_CENTER,
+    //   //   });
+    //   // });
+    //   // socket.off("categoryAdded", (category) => {
+    //   //   console.log("off");
+    //   // });
+    //   const handleCategoryAdded = (category) => {
+    //     toast.success("New category added!", {
+    //       position: toast.POSITION.TOP_CENTER,
+    //     });
+    //     socket.off("categoryAdded", handleCategoryAdded);
+    //   };
+    //   socket.once("categoryAdded", handleCategoryAdded);
 
-      socket.once("categoryUpdated", (category) => {
-        toast.info("Category updated!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
+    socket.on("categoryAdded", () => {
+      toast.success("New category added!", {
+        position: toast.POSITION.TOP_CENTER,
       });
-      socket.off("categoryUpdated", (category) => {
-        console.log("off");
-      });
+      getcategories();
+    });
+    // }
+    // }
 
-      socket.on("categoryDeleted", (category) => {
-        toast.warning("Category deleted!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
+    socket.on("categoryUpdated", (category) => {
+      toast.info("Category updated!", {
+        position: toast.POSITION.TOP_CENTER,
       });
-    }
+      getcategories();
+    });
+    //   socket.off("categoryUpdated", (category) => {
+    //     console.log("off");
+    //   });
+
+    socket.on("categoryDeleted", (category) => {
+      toast.warning("Category deleted!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      getcategories();
+    });
 
     getcategories();
     getUser();
 
     return () => {
       if (socket) {
-        // socket.off("categoryAdded");
-        // socket.off("categoryUpdated");
-        // socket.off("categoryDeleted");
+        socket.off("categoryAdded");
+        socket.off("categoryUpdated");
+        socket.off("categoryDeleted");
       }
-    }
+    };
+    // }, []);
   }, [socket]);
 
   const getcategories = async () => {
@@ -112,7 +135,7 @@ export default function read() {
 
   function handleDelete(id) {
     //id is only the sr no of the table
-    //get id of the category 
+    //get id of the category
     id = categories[id - 1].id;
     try {
       axios
@@ -379,14 +402,14 @@ export default function read() {
             </Cell>
           </Column>
         </Table> */}
-        {categories.length >0 ? (
-        <DataGrid
-          columns={columns}
-          rows={rows}
-          pageSize={5}
-          checkboxSelection
-          disableSelectionOnClick
-        />
+        {categories.length > 0 ? (
+          <DataGrid
+            columns={columns}
+            rows={rows}
+            pageSize={5}
+            checkboxSelection
+            disableSelectionOnClick
+          />
         ) : (
           <div className={styles.noProduct}>
             <img
@@ -399,10 +422,12 @@ export default function read() {
             />
             <h1
               style={{
-                marginLeft: "30px",	
+                marginLeft: "30px",
                 marginTop: "-20px",
               }}
-            >No Categories Found</h1>
+            >
+              No Categories Found
+            </h1>
           </div>
         )}
       </div>

@@ -30,6 +30,7 @@ export default function update() {
   });
 
   const router = useRouter();
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
     if (socket === null) {
@@ -91,6 +92,29 @@ export default function update() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     setIsFormSubmitted(true);
+
+    if (
+      data.name === "" ||
+      data.name.length < 3 ||
+      data.name.length > 20 ||
+      !data.name.match(/^[a-zA-Z ]*$/)
+    ) {
+      console.log("name");
+      return;
+    }
+
+    if (data.price === "") {
+      return;
+    }
+
+    if (
+      data.description === "" ||
+      data.description.length < 3 ||
+      data.description.length > 100 ||
+      !data.description.match(/^[a-zA-Z ]*$/)
+    ) {
+      return;
+    }
 
     const result = Products.filter((item) => item.name == data.name);
     console.log(result);
@@ -157,9 +181,9 @@ export default function update() {
                 (data.name === "" ||
                   data.name.length < 3 ||
                   data.name.length > 20 ||
-                  data.name.match(/^[a-zA-Z0-9 ]*$/)) && (
+                  !data.name.match(/^[a-zA-Z ]*$/)) && (
                   <span className={styles.error}>
-                    Name must be between 3 to 20 characters and must not contain
+                    Name must be between 3 to 20 characters and must not contain number or
                     special characters
                   </span>
                 )}
@@ -176,16 +200,11 @@ export default function update() {
                 minLength={3}
                 value={data.price}
               />
-              {isFormSubmitted &&
-                (data.price === "" ||
-                  data.price.length < 3 ||
-                  data.price.length > 20 ||
-                  data.price.match(/^[a-zA-Z0-9 ]*$/)) && (
-                  <span className={styles.error}>
-                    Price must be between 3 to 20 characters and must not
-                    contain special characters
-                  </span>
-                )}
+              {isFormSubmitted && data.price === "" && (
+                <span className={styles.error}>
+                  Price must be greater than 0
+                </span>
+              )}
             </label>
 
             <label className={styles.formLabel}>
@@ -204,7 +223,7 @@ export default function update() {
                 (data.description === "" ||
                   data.description.length < 3 ||
                   data.description.length > 20 ||
-                  data.description.match(/^[a-zA-Z0-9 ]*$/)) && (
+                  !data.description.match(/^[a-zA-Z ]*$/)) && (
                   <span className={styles.error}>
                     Description must be between 3 to 20 characters and must not
                     contain special characters

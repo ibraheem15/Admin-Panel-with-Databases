@@ -9,6 +9,8 @@ import Cookies from "js-cookie";
 import * as io from "socket.io-client";
 import { useRouter } from "next/router";
 
+const socket = io("http://localhost:8010");
+
 export default function category() {
   const [data, setData] = useState({
     namee: "",
@@ -22,15 +24,16 @@ export default function category() {
     password: "",
     mobile: "",
   });
-  const [socket, setSocket] = useState(null);
   const router = useRouter();
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  // const [socket, setSocket] = useState(null);
+  // const socket = io("http://localhost:8010");
 
   useEffect(() => {
-    if (socket === null) {
-      const newSocket = io("http://localhost:8010");
-      setSocket(newSocket);
-    }
+    // if (socket === null) {
+    //   const newSocket = io("http://localhost:8010");
+    //   setSocket(newSocket);
+    // }
 
     getCategories();
     getUser();
@@ -96,7 +99,6 @@ export default function category() {
       console.log(response.data);
 
       socket.emit("newCategory", response.data);
-      setData({});
 
       //add notification to database
       const notification = {

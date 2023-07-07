@@ -5,67 +5,73 @@ import styles from "../../styles/product/read.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 //mui datagrid
 import { DataGrid } from "@mui/x-data-grid";
 import Link from "next/dist/client/link";
 //notification
 import * as io from "socket.io-client";
-import Cookies from "js-cookie";
+const sockett = io.connect("http://localhost:8010");
 
 export default function read() {
   const [category, setcategory] = useState([]);
   const [products, setproducts] = useState([]);
   const router = useRouter();
-  const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState(sockett);
 
   useEffect(() => {
-    if (socket === null) {
-      const newSocket = io("http://localhost:8010", {
-        transports: ["websocket"],
-        upgrade: false,
+    // if (socket === null) {
+    //   const newSocket = io("http://localhost:8010", {
+    //     transports: ["websocket"],
+    //     upgrade: false,
+    //   });
+    //   setSocket(newSocket);
+    // }
+    // if (socket) {
+    socket.on("productAdded", (category) => {
+      toast.success("New Product added!", {
+        position: toast.POSITION.TOP_CENTER,
       });
-      setSocket(newSocket);
-    }
-    if (socket) {
-      socket.once("productAdded", (category) => {
-        toast.success("New Product added!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      });
-      socket.off("productAdded", (category) => {
-        console.log("productAdded");
-      });
+      getproducts();
+    });
+    //   socket.off("productAdded", (category) => {
+    //     console.log("productAdded");
+    //   });
 
-      // socket.once("productUpdated", (category) => {
-      //   toast.info("Product updated!", {
-      //     position: toast.POSITION.TOP_CENTER,
-      //   });
-      // });
-      // socket.off("productUpdated", (category) => {
-      //   console.log("productUpdated");
-      // });
-
-      const handleProductUpdated = (product) => {
-        toast.info("Product updated!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        socket.off("productUpdated", handleProductUpdated);
-      };
-      socket.once("productUpdated", handleProductUpdated);
-
-      socket.once("productDeleted", (category) => {
-        toast.warning("Product deleted!", {
-          position: toast.POSITION.TOP_CENTER,
-        });
+    socket.on("productUpdated", (category) => {
+      toast.info("Product updated!", {
+        position: toast.POSITION.TOP_CENTER,
       });
-    }
+      getproducts();
+    });
+    // socket.off("productUpdated", (category) => {
+    //   console.log("productUpdated");
+    // });
+
+    //   const handleProductUpdated = (product) => {
+    //     toast.info("Product updated!", {
+    //       position: toast.POSITION.TOP_CENTER,
+    //     });
+    //     socket.off("productUpdated", handleProductUpdated);
+    //   };
+    //   socket.once("productUpdated", handleProductUpdated);
+
+    socket.on("productDeleted", (category) => {
+      toast.warning("Product deleted!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      getproducts();
+    });
+    // }
 
     getproducts();
     getcategory();
 
     return () => {
       if (socket) {
-        // socket.off("productUpdated");
+        socket.off("productUpdated");
+        socket.off("productAdded");
+        socket.off("productDeleted");
       }
     };
   }, [socket]);
@@ -234,12 +240,14 @@ export default function read() {
               width="400"
               height="400"
             />
-             <h1
+            <h1
               style={{
-                marginLeft: "50px",	
+                marginLeft: "50px",
                 marginTop: "-30px",
               }}
-            >No Products Found</h1>
+            >
+              No Products Found
+            </h1>
           </div>
         )}
       </div>
