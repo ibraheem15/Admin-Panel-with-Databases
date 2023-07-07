@@ -41,10 +41,11 @@ function index() {
     <RootLayout>
       <div
         style={{
-          marginTop: "80px",
-          marginLeft: "250px",
-          fontFamily: "sans-serif",
+          // marginTop: "80px",
+          // marginLeft: "250px",
+          // fontFamily: "sans-serif",
         }}
+        className={styles.container}
       >
         <h1
           style={{

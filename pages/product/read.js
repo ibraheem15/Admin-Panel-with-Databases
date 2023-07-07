@@ -210,6 +210,7 @@ export default function read() {
             rowsPerPageOptions={[5]}
             checkboxSelection
             disableSelectionOnClick
+            className={styles.datatable}
           />
         ) : (
           <div className={styles.noProduct}>

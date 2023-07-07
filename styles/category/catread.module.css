@@ -50,3 +50,23 @@
   font-family: sans-serif;
   margin-top: -5rem;
 }
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin-left: 0px;
+  }
+  .dataGridWrapper {
+    margin-left: 200px;
+    width: 100%;
+  }
+  .datatable {
+    margin-left: 400px;
+  }
+  .noProduct{
+    margin-top: -1.5rem;
+    height: 50vh;
+  }
+  .addContainer{
+    margin-left: 0px;
+  }
+}
