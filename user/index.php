@@ -1,6 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
 
 include '../DBConnect.php';
 
@@ -43,14 +44,20 @@ switch ($method) {
         break;
 
     case 'PUT':
-        $data = (file_get_contents("php://input"));
-        $stmt = $conn->prepare("UPDATE `users` SET `username` = :username, `password` = :password WHERE `id` = :id");
+        $data = json_decode(file_get_contents("php://input"));
+        $id = $_GET['id'];
+        $username =  $data->username;
+        $password = $data->password;
+        $email = $data->email;
+        $mobile = $data->mobile;
+        
+
+        $stmt = $conn->prepare("UPDATE users SET username = :username,email = :email,password = :password,mobile = :mobile WHERE id = :id");
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':mobile', $mobile);
         $stmt->bindParam(':id', $id);
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $id = $_GET['id'];
         $stmt->execute();
         break;
     case 'DELETE':
