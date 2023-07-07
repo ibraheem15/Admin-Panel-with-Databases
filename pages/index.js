@@ -37,9 +37,6 @@ function index() {
     });
   };
 
-  // if(!token) {
-  //   return <Login setToken={setToken} />
-  // }
   return (
     <RootLayout>
       <div
@@ -58,57 +55,6 @@ function index() {
         >
           Dashboard
         </h1>
-        {/* <div className={styles.container}>
-          <div class={styles.card}>
-            <div class={styles.count}>
-              <h3 class={styles.cardtitle}>Total Categories</h3>
-              <div class={styles.counter}>{categories.length}</div>
-            </div>
-            <div class={styles.count1}>
-              <h3 class={styles.cardtitle}>Recently Created Categories</h3>
-              <div class={styles.counter1}>
-                {
-                  categories.filter((category) => {
-                    const date = new Date(category.created_at);
-                    const today = new Date();
-                    const diffTime = Math.abs(today - date);
-                    const diffDays = Math.ceil(
-                      diffTime / (1000 * 60 * 60 * 24)
-                    );
-                    if (diffDays <= 7) {
-                      return category;
-                    }
-                  }).length
-                }
-              </div>
-            </div>
-          </div>
-          <div class={styles.card}>
-            <div class={styles.count}>
-              <h3 class={styles.cardtitle}>Total Products</h3>
-              <div class={styles.counter}>{products.length}</div>
-            </div>
-
-            <div class={styles.count1}>
-              <h3 class={styles.cardtitle}>Recently Created Products</h3>
-              <div class={styles.counter1}>
-                {
-                  products.filter((product) => {
-                    const date = new Date(product.created_at);
-                    const today = new Date();
-                    const diffTime = Math.abs(today - date);
-                    const diffDays = Math.ceil(
-                      diffTime / (1000 * 60 * 60 * 24)
-                    );
-                    if (diffDays <= 7) {
-                      return product;
-                    }
-                  }).length
-                }
-              </div>
-            </div>
-          </div>
-        </div> */}
         <div className={styles.card_container}>
           <div className={styles.card}>
             <div className={styles.img_section}></div>

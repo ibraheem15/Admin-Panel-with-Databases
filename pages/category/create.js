@@ -26,14 +26,8 @@ export default function category() {
   });
   const router = useRouter();
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  // const [socket, setSocket] = useState(null);
-  // const socket = io("http://localhost:8010");
 
   useEffect(() => {
-    // if (socket === null) {
-    //   const newSocket = io("http://localhost:8010");
-    //   setSocket(newSocket);
-    // }
 
     getCategories();
     getUser();
@@ -65,10 +59,7 @@ export default function category() {
       data.namee.length < 3 ||
       !data.namee.match(/^[a-zA-Z ]*$/)
     ) {
-      // toast.error("Invalid Category Name!", {
-      //   position: toast.POSITION.TOP_CENTER,
-      // });
-      // setIsFormSubmitted(false);
+   
       return;
     }
 

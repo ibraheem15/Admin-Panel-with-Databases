@@ -140,36 +140,7 @@ export default function update() {
         <div className={styles.category}>
           <h1 className={styles.catTitle}>Update Category</h1>
           <form className={styles.catForm} onSubmit={handleUpdate}>
-            {/* <label className={styles.formLabel}>
-              <div className={styles.inputWrapper}>
-                <input
-                  type="text"
-                  onChange={(e) =>
-                    setData({ ...data, oldname: e.target.value })
-                  }
-                  name="oldname"
-                  className={styles.inputField}
-                  placeholder="Old Name"
-                  minLength={3}
-                />
-                <span
-                  className={styles.inputSpan}
-                  style={{
-                    margin: "10px 0px",
-                  }}
-                >
-                  OR
-                </span>
-                <input
-                  type="text"
-                  onChange={(e) => setData({ ...data, id: e.target.value })}
-                  name="id"
-                  className={styles.inputField}
-                  placeholder="Id"
-                  minLength={1}
-                />
-              </div>
-            </label> */}
+           
             <label className={styles.formLabel}>
               <input
                 type="text"

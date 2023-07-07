@@ -20,42 +20,21 @@ export default function read() {
   const [socket, setSocket] = useState(sockett);
 
   useEffect(() => {
-    // if (socket === null) {
-    //   const newSocket = io("http://localhost:8010", {
-    //     transports: ["websocket"],
-    //     upgrade: false,
-    //   });
-    //   setSocket(newSocket);
-    // }
-    // if (socket) {
+  
     socket.on("productAdded", (category) => {
       toast.success("New Product added!", {
         position: toast.POSITION.TOP_CENTER,
       });
       getproducts();
     });
-    //   socket.off("productAdded", (category) => {
-    //     console.log("productAdded");
-    //   });
-
+  
     socket.on("productUpdated", (category) => {
       toast.info("Product updated!", {
         position: toast.POSITION.TOP_CENTER,
       });
       getproducts();
     });
-    // socket.off("productUpdated", (category) => {
-    //   console.log("productUpdated");
-    // });
-
-    //   const handleProductUpdated = (product) => {
-    //     toast.info("Product updated!", {
-    //       position: toast.POSITION.TOP_CENTER,
-    //     });
-    //     socket.off("productUpdated", handleProductUpdated);
-    //   };
-    //   socket.once("productUpdated", handleProductUpdated);
-
+   
     socket.on("productDeleted", (category) => {
       toast.warning("Product deleted!", {
         position: toast.POSITION.TOP_CENTER,
@@ -233,9 +212,7 @@ export default function read() {
         ) : (
           <div className={styles.noProduct}>
             <img
-              // src="https://callistoindia.com/images/no-products-found.png"
               src="https://thenounproject.com/api/private/icons/4440881/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"
-              // src="https://png.pngtree.com/png-clipart/20210711/original/pngtree-no-result-search-icon-png-image_6511543.jpg"
               alt="no-product"
               width="400"
               height="400"

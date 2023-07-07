@@ -17,8 +17,6 @@ export default function Login() {
   const [users, setUsers] = useState([]);
   const router = useRouter();
   const dispatch = useDispatch();
-  // const auth = useSelector((state) => state.auth);
-
 
   useEffect(() => {
     const token = Cookies.get("user");
@@ -119,9 +117,7 @@ export default function Login() {
                 name="email"
                 className={styles.inputField}
                 placeholder="Email"
-                // pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                 minLength={3}
-                // title="Please enter a valid email address e.g. abc@abc.com"
               />
             </label>
             <label className={styles.formLabel}>
@@ -131,8 +127,6 @@ export default function Login() {
                 onChange={(e) => setData({ ...data, password: e.target.value })}
                 required
                 placeholder="Password"
-                // pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])(?=\S+$).{8,}$"
-                // title="Please enter a valid password with at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character e.g. Abcd123@"
               />
             </label>
             <div className={styles.submitButtonWrapper}>
