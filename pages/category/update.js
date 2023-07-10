@@ -8,6 +8,18 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 //notification imports
 import * as io from "socket.io-client";
+//firebase
+import { db } from "../../firebase.config";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 
 export default function update() {
   const [data, setData] = useState({
@@ -26,6 +38,7 @@ export default function update() {
     mobile: "",
   });
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [prevData, setPrevData] = useState({});
 
   const router = useRouter();
 
@@ -46,6 +59,11 @@ export default function update() {
         (item) => item.id == window.location.search.split("=")[1].split("&")[0]
       );
       setData({
+        id: result[0].id,
+        name: result[0].name,
+        description: result[0].description,
+      });
+      setPrevData({
         id: result[0].id,
         name: result[0].name,
         description: result[0].description,
@@ -114,6 +132,32 @@ export default function update() {
           });
           socket.emit("updateCategory", res.data);
         });
+      try {
+        //firebase
+        const categoriesRef = collection(db, "categories");
+        const q = query(categoriesRef, where("name", "==", prevData.name));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+        console.log(prevData.name);
+
+        const categories = querySnapshot.docs.map((doc) => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          };
+        });
+        console.log(categories);
+
+        categories.forEach((category) => {
+          updateDoc(doc(db, "categories", category.id), {
+            name: data.name,
+            description: data.description,
+            updated_at: serverTimestamp(),
+          });
+        });
+      } catch (e) {
+        console.log(e);
+      }
 
       //notificiation in database
       axios
@@ -143,7 +187,6 @@ export default function update() {
         <div className={styles.category}>
           <h1 className={styles.catTitle}>Update Category</h1>
           <form className={styles.catForm} onSubmit={handleUpdate}>
-           
             <label className={styles.formLabel}>
               <input
                 type="text"

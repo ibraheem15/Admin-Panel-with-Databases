@@ -8,6 +8,14 @@ import Cookies from "js-cookie";
 //notification imports
 import * as io from "socket.io-client";
 import { useRouter } from "next/router";
+//firebase
+import { db } from "../../firebase.config";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+} from "firebase/firestore";
 
 const socket = io("http://localhost:8010");
 
@@ -91,6 +99,15 @@ export default function category() {
       });
 
       socket.emit("newCategory", response.data);
+
+      // firebase
+      const collectionRef = collection(db, "categories");
+      const payload = {
+        name: data.namee,
+        description: data.description,
+        created_at: serverTimestamp(),
+      };
+      const docRef = await addDoc(collectionRef, payload);
 
       //add notification to database
       const notification = {

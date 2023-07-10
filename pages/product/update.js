@@ -10,6 +10,19 @@ import { useRouter } from "next/router";
 //notification imports
 import * as io from "socket.io-client";
 
+//firebase
+import { db } from "../../firebase.config";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
+
 export default function update() {
   const [data, setData] = useState({
     name: "",
@@ -31,6 +44,7 @@ export default function update() {
 
   const router = useRouter();
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [prevData, setPrevData] = useState({});
 
   useEffect(() => {
     if (socket === null) {
@@ -50,6 +64,13 @@ export default function update() {
         (item) => item.id == window.location.search.split("=")[1].split("&")[0]
       );
       setData({
+        id: result[0].id,
+        name: result[0].name,
+        price: result[0].price,
+        description: result[0].description,
+        category_id: result[0].category_id,
+      });
+      setPrevData({
         id: result[0].id,
         name: result[0].name,
         price: result[0].price,
@@ -132,9 +153,38 @@ export default function update() {
           // console.log(res.data);
           socket.emit("updateProduct", res.data);
         });
-        toast.info("Product updated!", {
-          position: toast.POSITION.TOP_CENTER,
+      toast.info("Product updated!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+      try {
+        //firebase
+        const docRef = collection(db, "products");
+        const q = query(docRef, where("name", "==", prevData.name));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+        console.log(prevData.name);
+
+        const products = querySnapshot.docs.map((doc) => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          };
         });
+        console.log(products);
+
+        products.forEach(async (product) => {
+          updateDoc(doc(db, "products", product.id), {
+            name: data.name,
+            price: data.price,
+            description: data.description,
+            category_id: data.category_id,
+            updated_at: serverTimestamp(),
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
 
       //notificiation in database
       axios

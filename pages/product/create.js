@@ -9,6 +9,14 @@ import { useRouter } from "next/router";
 import io from "socket.io-client";
 import Cookies from "js-cookie";
 const socket = io.connect("http://localhost:8010");
+//firebase
+import { db } from "../../firebase.config";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+} from "firebase/firestore";
 
 export default function category() {
   const [data, setData] = useState({
@@ -87,6 +95,16 @@ export default function category() {
       });
 
       socket.emit("newProduct", response.data);
+
+      //firebase
+      const docRef = await addDoc(collection(db, "products"), {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        category_id: data.category_id,
+        created_at: serverTimestamp(),
+      });
+      console.log("Document written with ID: ", docRef.id);
 
       //notificiation in database
       axios

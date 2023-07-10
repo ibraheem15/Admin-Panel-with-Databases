@@ -7,11 +7,23 @@ import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "../components/layout";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
+//firebase
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "../firebase.config";
 
 function signup() {
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
   const router = useRouter();
+  //firebase
+  const collectionRef = collection(db, "users");
+  const [createuser, setCreateuser] = useState("");
+  const [fusers, setFusers] = useState([]);
 
   useEffect(() => {
     const token = Cookies.get("user");
@@ -19,6 +31,7 @@ function signup() {
       router.push("/");
     }
     getusers();
+    getFusers();
   }, []);
 
   const getusers = async () => {
@@ -26,6 +39,13 @@ function signup() {
       // console.log(res.data);
       setUsers(res.data);
     });
+  };
+
+  const getFusers = async () => {
+    const querySnapshot = await getDocs(collectionRef);
+    const ffusers = querySnapshot.docs.map((doc) => doc.data());
+    console.log(ffusers);
+    setFusers(ffusers);
   };
 
   const handleSubmit = async (e) => {
@@ -50,6 +70,21 @@ function signup() {
       } catch (error) {
         console.log(error);
       }
+    }
+
+    //firebase
+    try {
+      const docRef = await addDoc(collectionRef, {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        mobile: data.mobile,
+        createdAt: serverTimestamp(),
+      });
+      console.log("Document written with ID: ", docRef.id);
+      setCreateuser(docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
     }
   };
 
@@ -122,7 +157,7 @@ function signup() {
                     Log In
                   </button>
                 </a>
-              </Link> 
+              </Link>
 
               <button type="submit" className={styles.submitButton1}>
                 Sign Up

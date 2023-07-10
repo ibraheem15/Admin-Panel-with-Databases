@@ -14,6 +14,18 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // io
 import io from "socket.io-client";
+//firebase
+import { db } from "../firebase.config";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 
 export default function profile() {
   const [data, setData] = useState({
@@ -28,6 +40,7 @@ export default function profile() {
   const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
   const [isformsubmitted, setisformsubmitted] = useState(false);
+  const [prevData, setPrevData] = useState({});
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -91,6 +104,34 @@ export default function profile() {
       console.log(error);
     }
 
+    try {
+      //firebase
+      const docRef = collection(db, "users");
+      const q = query(docRef, where("username", "==", prevData.username));
+      const querySnapshot = await getDocs(q);
+
+      const users = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+
+      console.log(users);
+
+      users.forEach(async (user) => {
+        updateDoc(doc(db, "users", user.id), {
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          mobile: data.mobile,
+          updated_at: serverTimestamp(),
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     //notificiation in database
     axios
       .post("http://localhost/api/notifications/index.php", {
@@ -101,6 +142,18 @@ export default function profile() {
       .then((res) => {
         console.log(res.data);
       });
+
+    //update user in cookies
+    Cookies.set(
+      "user",
+      JSON.stringify({
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        mobile: data.mobile,
+      })
+    );
   };
 
   const getUser = async () => {
@@ -109,6 +162,13 @@ export default function profile() {
     if (user.id !== null) {
       //get user from cookies
       setData({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        mobile: user.mobile,
+      });
+      setPrevData({
         id: user.id,
         username: user.username,
         email: user.email,
@@ -129,6 +189,13 @@ export default function profile() {
             mobile: user.mobile,
           })
         );
+        setPrevData({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          mobile: user.mobile,
+        });
       }
     }
   };
@@ -172,17 +239,7 @@ export default function profile() {
           fontFamily: "sans-serif",
         }}
       >
-        <h1
-          // style={{
-          //   textAlign: "center",
-          //   fontSize: "40px",
-          //   fontWeight: "bold",
-          //   marginLeft: "10rem",
-          // }}
-          className={styles.title}
-        >
-          Profile
-        </h1>
+        <h1 className={styles.title}>Profile</h1>
         <div className={styles.category}>
           {/* image */}
           <div className={styles.catImage}>
@@ -214,7 +271,7 @@ export default function profile() {
                 (data.username === "" ||
                   data.username.length < 3 ||
                   data.username.length > 20 ||
-                  !data.username.match(/^[a-zA-Z]+$/)) && (
+                  !data.username.match(/^[a-zA-Z0-9]+$/)) && (
                   <span className={styles.error}>Invalid Username</span>
                 )}
             </label>
