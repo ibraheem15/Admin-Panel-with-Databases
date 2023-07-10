@@ -12,12 +12,26 @@ import Link from "next/dist/client/link";
 //notification
 import io from "socket.io-client";
 const sockett = io.connect("http://localhost:8010");
+//firebase
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase.config";
 
 export default function read() {
   const [category, setcategory] = useState([]);
   const [products, setproducts] = useState([]);
   const router = useRouter();
   const [socket, setSocket] = useState(sockett);
+  const [prevData, setPrevData] = useState({});
 
   useEffect(() => {
     socket.on("productAdded", (category) => {
@@ -77,6 +91,28 @@ export default function read() {
           socket.emit("deleteProduct", id);
           getproducts();
         });
+      console.log(products);
+      products.forEach(async (product) => {
+        if (product.id == id) {
+          // setPrevData(product);
+          const docRef = collection(db, "products");
+          const q = query(docRef, where("name", "==", product.name));
+          const querySnapshot = await getDocs(q);
+          console.log(querySnapshot);
+          console.log(product.name);
+
+          const productss = querySnapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              ...doc.data(),
+            };
+          });
+          console.log(productss);
+          productss.forEach(async (product) => {
+            deleteDoc(doc(db, "products", product.id));
+          });
+        }
+      });
     } catch (error) {
       console.log(error);
     }

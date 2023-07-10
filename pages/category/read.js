@@ -14,6 +14,19 @@ import { DataGrid } from "@mui/x-data-grid";
 //notification handle
 import io from "socket.io-client";
 const sockett = io.connect("http://localhost:8010");
+//firebase
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase.config";
 
 export default function read() {
   const [categories, setcategories] = useState([]);
@@ -26,10 +39,9 @@ export default function read() {
     mobile: "",
   });
   const [socket, setSocket] = useState(sockett);
-  //notification
+  const [prevData, setPrevData] = useState({});
 
   useEffect(() => {
-  
     socket.on("categoryAdded", () => {
       toast.success("New category added!", {
         position: toast.POSITION.TOP_CENTER,
@@ -43,7 +55,7 @@ export default function read() {
       });
       getcategories();
     });
-  
+
     socket.on("categoryDeleted", (category) => {
       toast.warning("Category deleted!", {
         position: toast.POSITION.TOP_CENTER,
@@ -101,6 +113,29 @@ export default function read() {
           socket.emit("deleteCategory", res.data);
           getcategories();
         });
+
+      categories.forEach(async (category) => {
+        if (category.id == id) {
+          console.log(category);
+          const docRef = collection(db, "categories");
+          const q = query(docRef, where("name", "==", category.name));
+          const querySnapshot = await getDocs(q);
+          console.log(querySnapshot);
+          console.log(category.name);
+
+          const categories = querySnapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              ...doc.data(),
+            };
+          });
+          console.log(categories);
+
+          categories.forEach((category) => {
+            deleteDoc(doc(db, "categories", category.id));
+          });
+        }
+      });
 
       //notification in database
       axios
@@ -207,7 +242,7 @@ export default function read() {
             Add Category
           </span>
         </div>
-     
+
         {categories.length > 0 ? (
           <DataGrid
             columns={columns}
