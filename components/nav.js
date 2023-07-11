@@ -58,6 +58,15 @@ export default function Nav() {
     // getUser();
     // console.log(userRedux);
     userRedux && setUser(userRedux);
+    //if redux is empty, get from cookie
+    if (userRedux.id === null) {
+      console.log("redux is empty");
+      const user = Cookies.get("user");
+      if (user) {
+        setUser(JSON.parse(user));
+      }
+    }
+
     console.log(userRedux);
   }, []);
 
@@ -105,7 +114,7 @@ export default function Nav() {
               Sign Out
             </a>
           </Link> */}
-          <span className={styles.button1}>Welcome, {userRedux.username}</span>
+          <span className={styles.button1}>Welcome, {user.username}</span>
           <SignoutButton />
 
         </div>
