@@ -7,6 +7,18 @@ import Link from "next/link";
 import * as io from "socket.io-client";
 import axios from "axios";
 import { useRouter } from "next/dist/client/router";
+//joyride
+import Joyride, { CallBackProps } from "react-joyride";
+// import { steps } from "./Toursteps";
+import { Tsteps } from "./Toursteps";
+//Cookie
+import Cookies from "js-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
+//redux
+import { useSelector, useDispatch } from "react-redux";
+import { setTour } from "../redux/features/Tour";
+import { useAppContext } from "./Tourcontext";
+import { useMount } from "react-use";
 
 export default function sidebar() {
   const [showProduct, setShowProduct] = useState(false);
@@ -15,7 +27,7 @@ export default function sidebar() {
   const [showNotification, setShowNotification] = useState(false);
   const [Notifications, setNotifications] = useState([]);
   const router = useRouter();
-
+  const [loggedIn, setLoggedIn] = useState(false);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -40,13 +52,223 @@ export default function sidebar() {
 
   useEffect(() => {
     getNotifications();
+    const cookieValue = Cookies.get("user");
+    if (cookieValue) {
+      setLoggedIn(true);
+    }
   }, []);
 
+  const {
+    setState,
+    state: { run, stepIndex, steps,tourActive },
+  } = useAppContext();
+
+  useMount(() => {
+    setState({
+      steps: [
+        {
+          target: "#dashboard",
+          // content:
+          //   "Welcome to the Dashboard! This is the main page of your application where you can monitor and view the amount of data.",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Dashboard
+              </h1>
+              <p>
+                Welcome to the Dashboard! This is the main page of your
+                application where you can monitor and view the amount of data.
+              </p>
+            </>
+          ),
+        },
+        {
+          target: "#categories",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Categories
+              </h1>
+              <p>
+                This section displays the categories in your application. You
+                can add, edit, or delete categories from here.
+              </p>
+            </>
+          ),
+        },
+        {
+          target: "#add_category",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Add Category
+              </h1>
+              <p>
+                This button allows you to add a new category to your
+                application.
+              </p>
+            </>
+          ),
+        },
+        {
+          target: "#products",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Products
+              </h1>
+              <p>
+                This section displays the products in your application. You can
+                add, edit, or delete products from here.
+              </p>
+            </>
+          ),
+        },
+        {
+          target: "#notification",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Notification
+              </h1>
+              <p>
+                This section shows{" "}
+                <span style={{ fontWeight: "bold" }}>notifications</span>{" "}
+                related to your application with total number of notifications
+                displayed in front of it
+              </p>
+            </>
+          ),
+        },
+        {
+          target: "#profile",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Profile
+              </h1>
+              <p>
+                This section allows you to view and update your{" "}
+                <span style={{ fontWeight: "bold" }}>profile</span> information.
+              </p>
+            </>
+          ),
+        },
+        {
+          target: "#signout",
+          content: (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Sign Out
+              </h1>
+              <p>
+                Clicking on this button will{" "}
+                <span style={{ fontWeight: "bold" }}>sign you out</span> from
+                the application.
+              </p>
+            </>
+          ),
+        },
+      ],
+    });
+  });
+
+  useMount(() => {
+    if (tourActive) {
+      setState({ run: true, stepIndex: 4 });
+    }
+  });
+
+  const handleCallback = (data) => {
+    const { action, index, lifecycle, type } = data;
+
+    if (type === "step:after" && index === 0) {
+      setState({ run: true, stepIndex: 1 });
+      console.log(run, stepIndex);
+    }
+
+    if (type === "step:after" && index === 1) {
+      setState({ run: true,stepIndex: 2});
+      console.log("bla");
+      console.log(run, stepIndex);
+      router.push("/category/read");
+    }
+
+    if (type === "step:after" && index === 2) {
+      setState({ run: true, stepIndex: 3 });
+      router.push("/");
+    }
+  };
+
   return (
-    // <div className={styles.sidebar}>
     <div className={`${isOpen ? styles.sidebar_active : styles.sidebar}`}>
+      <Joyride
+        steps={steps}
+        continuous={true}
+        showProgress={true}
+        showSkipButton
+        callback={handleCallback}
+        run={run}
+        stepIndex={stepIndex}
+      />
+      <button
+        onClick={() => {
+          setState({ run: true, tourActive: true, stepIndex: 0 });
+        }}
+      >
+        Start Tour
+      </button>
+
       <div className={styles.sidebar__header}>
-        {/* <h3 className={styles.sidebar__title}>Sidebar</h3> */}
         <div
           className={`${isOpen ? styles.bars_active : styles.bars}`}
           onClick={toggleSidebar}
@@ -63,16 +285,16 @@ export default function sidebar() {
         </div>
       </div>
       <div className={styles.sidebar__content}>
-        <ul className={styles.sidebar__list}>
+        <ul className={styles.sidebar__list} id="firststep">
           <li>
             <Link href="/">
-              {/* <span className={styles.list_title}> */}
               <span
                 className={
                   router.pathname == "/"
                     ? styles.list_title_active
                     : styles.list_title
                 }
+                id="dashboard"
               >
                 <span className={styles.list_title_icon}>
                   <img
@@ -96,6 +318,7 @@ export default function sidebar() {
                     ? styles.list_title_active
                     : styles.list_title
                 }
+                id="categories"
               >
                 <span className={styles.list_title_icon}>
                   <img
@@ -176,6 +399,7 @@ export default function sidebar() {
                     ? styles.list_title_active
                     : styles.list_title
                 }
+                id="products"
               >
                 <span className={styles.list_title_icon}>
                   <img
@@ -252,11 +476,12 @@ export default function sidebar() {
               <span
                 className={
                   router.pathname.startsWith("/notification")
-                  ? styles.list_title_active
-                  : styles.list_title
+                    ? styles.list_title_active
+                    : styles.list_title
                 }
                 onClick={toggleNotification}
-                >
+                id="notification"
+              >
                 Notification
                 <span className={styles.list_title_iconn}>
                   {Notifications.length > 0 ? Notifications.length : null}
@@ -275,6 +500,7 @@ export default function sidebar() {
                     : styles.list_title
                 }
                 onClick={toggleNotification}
+                id="profile"
               >
                 <span className={styles.list_title_icon}>
                   <img

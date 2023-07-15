@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import RootLayout from "../../components/layout";
 import axios from "axios";
 import styles from "../../styles/category/catread.module.css";
+//Routing
 import { useRouter } from "next/router";
 import Link from "next/dist/client/link";
+//cookies
 import Cookies from "js-cookie";
 //* toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //* mui datagrid
 import { DataGrid } from "@mui/x-data-grid";
-
 //notification handle
 import io from "socket.io-client";
 const sockett = io.connect("http://localhost:8010");
@@ -27,6 +28,14 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase.config";
+//redux
+import { useSelector, useDispatch } from "react-redux";
+import { setTour } from "../../redux/features/Tour";
+import { useAppContext } from "../../components/Tourcontext";
+//mount
+import { useMount } from "react-use";
+//joyride
+import Joyride, { CallBackProps } from "react-joyride";
 
 export default function read() {
   const [categories, setcategories] = useState([]);
@@ -39,7 +48,21 @@ export default function read() {
     mobile: "",
   });
   const [socket, setSocket] = useState(sockett);
-  const [prevData, setPrevData] = useState({});
+
+  const {
+    setState,
+    state: { tourActive, run, stepIndex },
+  } = useAppContext();
+
+  useMount(() => {
+    console.log(tourActive);
+    console.log(stepIndex);
+    // if (tourActive) {
+    console.log("mount");
+    setState({ run: true, stepIndex: 2 });
+    console.log(run);
+    // }
+  });
 
   useEffect(() => {
     socket.on("categoryAdded", () => {
@@ -62,7 +85,6 @@ export default function read() {
       });
       getcategories();
     });
-
     getcategories();
     getUser();
 
@@ -77,7 +99,6 @@ export default function read() {
 
   const getcategories = async () => {
     axios.get("http://localhost/api/category/index.php").then((res) => {
-      console.log(res.data);
       setcategories(res.data);
     });
   };
@@ -230,6 +251,7 @@ export default function read() {
               style={{
                 cursor: "pointer",
               }}
+              id="add_category"
             />
           </Link>
           <span

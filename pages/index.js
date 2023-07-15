@@ -6,19 +6,23 @@ import styles from "../styles/index.module.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
+//react joyride
+// import Joyride from "react-joyride";
+import { steps } from "../components/Toursteps";
+//redux
+import { useSelector, useDispatch } from "react-redux";
+import { setTour } from "../redux/features/Tour";
 
 function index() {
   const [token, setToken] = useState();
   const [categories, setcategories] = useState([]);
   const [products, setproducts] = useState([]);
   const router = useRouter();
-
   useEffect(() => {
     const token = Cookies.get("user");
     if (!token) {
       router.push("/login");
     }
-
     getcategories();
     getproducts();
   }, []);
@@ -39,14 +43,7 @@ function index() {
 
   return (
     <RootLayout>
-      <div
-        style={{
-          // marginTop: "80px",
-          // marginLeft: "250px",
-          // fontFamily: "sans-serif",
-        }}
-        className={styles.container}
-      >
+      <div className={styles.container}>
         <h1
           style={{
             textAlign: "center",

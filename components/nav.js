@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/navbar.module.css";
+//toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+//cookies
 import Cookies from "js-cookie";
+//use router
 import { useRouter } from "next/dist/client/router";
+//redux
 import { useSelector } from "react-redux";
 
 export function SignoutButton() {
@@ -23,7 +27,7 @@ export function SignoutButton() {
   if (router.pathname === "/register") return null;
 
   return (
-    <button onClick={handleSIgnOut} className={styles.button}>
+    <button onClick={handleSIgnOut} className={styles.button} id="signout">
       Sign out
     </button>
   );
@@ -46,16 +50,7 @@ export default function Nav() {
 
   const userRedux = useSelector((state) => state.auth);
 
-
-  // const getUser = async () => {
-  //   const user = await Cookies.get("user");
-  //   if (user) {
-  //     setUser(JSON.parse(user));
-  //   }
-  // };
-
   useEffect(() => {
-    // getUser();
     // console.log(userRedux);
     userRedux && setUser(userRedux);
     //if redux is empty, get from cookie
@@ -115,8 +110,8 @@ export default function Nav() {
             </a>
           </Link> */}
           <span className={styles.button1}>Welcome, {user.username}</span>
-          <SignoutButton />
 
+          <SignoutButton />
         </div>
       </ul>
     </nav>
