@@ -246,7 +246,7 @@ export default function read() {
     },
     {
       target: "#nothing",
-    }
+    },
   ];
 
   const handleCallback = (data) => {
@@ -260,24 +260,24 @@ export default function read() {
 
   return (
     <RootLayout>
-      <Joyride
-        steps={steps}
-        continuous={true}
-        callback={handleCallback}
-        run={router.query.tour === "true" ? true : false}
-        // stepIndex={stepIndex}
-      />
       <div className={styles.container}>
         <ToastContainer />
         <div className={styles.title}>
+          <Joyride
+            steps={steps}
+            continuous={true}
+            callback={handleCallback}
+            run={router.query.tour === "true" ? true : false}
+            // stepIndex={stepIndex}
+          />
           <h1>All Products</h1>
         </div>
         {/* add product */}
         <div className={styles.addContainer}>
           <Link href="/product/create">
             <img
-              width="30"
-              height="30"
+              width="23"
+              height="23"
               src="https://img.icons8.com/ios/50/plus-2-math.png"
               alt="plus-2-math"
               style={{ cursor: "pointer" }}
@@ -286,10 +286,9 @@ export default function read() {
           </Link>
           <span
             style={{
-              marginTop: "3px",
               marginLeft: "10px",
-              fontSize: "20px",
             }}
+            className={styles.noProductText}
           >
             Add Product
           </span>

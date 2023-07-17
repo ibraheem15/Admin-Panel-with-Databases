@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import RootLayout from "../components/layout";
 
-import styles from "../styles/profile/product.module.css";
+import styles from "../styles/profile/profile.module.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";

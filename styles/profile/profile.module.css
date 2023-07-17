@@ -3,13 +3,12 @@
 }
 
 .container {
-  margin-top: 80px;
+  margin-top: 90px;
 }
 
 .category {
   max-width: 400px;
   /* margin: 10rem auto; */
-  margin-top: 3rem;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -62,9 +61,6 @@
 }
 
 .inputField {
-  /* padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px; */
   padding: 10px 5px;
   font-size: 16px;
   display: block;
@@ -109,17 +105,44 @@
   border: none;
 }
 
-@media screen and (max-width: 480px) {
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 40px;
+  margin-left: 10rem;
+}
+
+@media screen and (max-width: 600px) {
+  .error {
+    font-size: 0.7rem;
+  }
+  .container {
+    margin-left: 0rem;
+    margin-right: 0rem;
+    justify-content: center;
+  }
   .category {
-    margin-left: 2rem;
-    margin-right: -1rem;
+    margin-top: 3rem;
+    padding: 20px;
+    margin: 3rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
+  }
+  .title {
+    margin-left: 0rem;
+    margin-top: 5.5rem;
+    margin-bottom: 2rem;
   }
 
-  .catTitle {
-    font-size: 1.5rem;
-  }
-
-  .catForm {
+  .catForm{
+    margin-left: 0rem;
+    margin-right: 0rem;
   }
 
   .submitButtonWrapper {
@@ -134,41 +157,6 @@
   }
 }
 
-.error {
-  color: red;
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0rem;
-}
-
-.title {
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 40px;
-  /* margin-right: 5rem; */
-  margin-left: 10rem;
-}
-
-@media screen and (max-width: 730px) {
-  .error {
-    font-size: 0.7rem;
-  }
-  .container {
-    margin-left: 0rem;
-    margin-right: 0rem;
-  }
-  .category {
-    /* max-width: 400px; */
-    margin: 5rem;
-    margin-top: 3rem;
-    padding: 20px;
-  }
-  .title {
-    margin-left: 3rem;
-    margin-right: 5rem;
-  }
-}
-
 .passwordlabel {
   margin-bottom: 10px;
   display: flex;
@@ -176,6 +164,6 @@
 
 .showPassword {
   margin-left: -2rem;
-  margin-top: 5px;
+  margin-top: 10px;
   cursor: pointer;
 }

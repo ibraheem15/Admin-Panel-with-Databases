@@ -46,28 +46,38 @@
   padding: 1%;
 }
 
-.noProduct{
+.noProduct {
   font-family: sans-serif;
   margin-top: -3rem;
 }
 
-
-@media screen and (max-width: 730px) {
+@media screen and (max-width: 600px) {
   .container {
-    margin-left: 0px;
+    display: contents;
+    text-align: center;
+    justify-content: center;
+  }
+  .title {
+    margin-top: 5rem;
+    font-size: 0.8rem;
   }
   .dataGridWrapper {
     margin-left: 200px;
     width: 100%;
   }
   .datatable {
-    margin-left: 450px;
+    margin-left: 2.5rem;
   }
-  .noProduct{
+  .noProduct {
     margin-top: -1.5rem;
     height: 50vh;
   }
-  .addContainer{
-    margin-left: 0px;
+  .addContainer {
+    right: 10rem;
+    margin-top: 1rem;
+    justify-content: right;
+  }
+  .noProductText {
+    font-size: 1rem;
   }
 }
