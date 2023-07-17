@@ -182,3 +182,28 @@
     left: 0;
   }
 }
+
+.start_tour {
+  color: #dafffb;
+  border: 2px solid #dafffb;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: all ease-in 0.3s;
+  background: transparent;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: #ef4c5f;
+  /* center the biutton */
+  position: absolute;
+  left: 46%;
+  top: 5%;
+  transform: translate(-50%, -50%);
+}
+
+.start_tour:hover {
+  background-color: #ffffff;
+  color: #ef4c5f;
+  border: 2px solid #ef4c5f;
+}

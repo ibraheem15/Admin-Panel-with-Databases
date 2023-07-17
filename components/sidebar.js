@@ -60,7 +60,7 @@ export default function sidebar() {
 
   const {
     setState,
-    state: { run, stepIndex, steps,tourActive },
+    state: { run, stepIndex, steps, tourActive },
   } = useAppContext();
 
   const startTour = () => {
@@ -201,14 +201,13 @@ export default function sidebar() {
         },
         {
           target: "#nothing",
-        }
+        },
       ],
     });
   });
 
-
   const handleCallback = (data) => {
-    const { status,action, index, lifecycle, type } = data;
+    const { status, action, index, lifecycle, type } = data;
     const finishedStatuses = ["finished", "skipped"];
     if (finishedStatuses.includes(status)) {
       setState({ run: false, tourActive: false });
@@ -216,9 +215,16 @@ export default function sidebar() {
     }
   };
 
-
   return (
     <div className={`${isOpen ? styles.sidebar_active : styles.sidebar}`}>
+      <button
+        onClick={() => {
+          setState({ run: true, tourActive: true, stepIndex: 0 });
+        }}
+        className={styles.start_tour}
+      >
+        Start Tour
+      </button>
       <Joyride
         steps={steps}
         continuous={true}
@@ -226,13 +232,6 @@ export default function sidebar() {
         callback={handleCallback}
         run={run}
       />
-      <button
-        onClick={() => {
-          setState({ run: true, tourActive: true, stepIndex: 0 });
-        }}
-      >
-        Start Tour
-      </button>
 
       <div className={styles.sidebar__header}>
         <div
