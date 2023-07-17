@@ -162,6 +162,8 @@
     display: block;
     transition: all 0.3s;
     margin-left: 190px;
+    cursor: pointer;
+    padding: 2%;
   }
 
   .bars_active {
@@ -170,6 +172,7 @@
     right: 0;
     margin-right: 10px;
     transition: all 0.3s;
+    cursor: pointer;
   }
 
   .sidebar__content {

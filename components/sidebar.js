@@ -249,7 +249,7 @@ export default function sidebar() {
           ></div>
         </div>
       </div>
-      <div className={styles.sidebar__content}>
+      <div className={styles.sidebar__content} >
         <ul className={styles.sidebar__list} id="firststep">
           <li>
             <Link href="/">
