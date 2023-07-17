@@ -63,13 +63,15 @@ export default function sidebar() {
     state: { run, stepIndex, steps,tourActive },
   } = useAppContext();
 
+  const startTour = () => {
+    setState({ run: true, tourActive: true, stepIndex: 0 });
+  };
+
   useMount(() => {
     setState({
       steps: [
         {
           target: "#dashboard",
-          // content:
-          //   "Welcome to the Dashboard! This is the main page of your application where you can monitor and view the amount of data.",
           content: (
             <>
               <h1
@@ -106,27 +108,6 @@ export default function sidebar() {
               <p>
                 This section displays the categories in your application. You
                 can add, edit, or delete categories from here.
-              </p>
-            </>
-          ),
-        },
-        {
-          target: "#add_category",
-          content: (
-            <>
-              <h1
-                style={{
-                  textAlign: "center",
-                  fontSize: "30px",
-                  fontWeight: "bold",
-                  fontFamily: "sans-serif",
-                }}
-              >
-                Add Category
-              </h1>
-              <p>
-                This button allows you to add a new category to your
-                application.
               </p>
             </>
           ),
@@ -218,47 +199,32 @@ export default function sidebar() {
             </>
           ),
         },
+        {
+          target: "#nothing",
+        }
       ],
     });
   });
 
-  useMount(() => {
-    if (tourActive) {
-      setState({ run: true, stepIndex: 4 });
-    }
-  });
 
   const handleCallback = (data) => {
-    const { action, index, lifecycle, type } = data;
-
-    if (type === "step:after" && index === 0) {
-      setState({ run: true, stepIndex: 1 });
-      console.log(run, stepIndex);
-    }
-
-    if (type === "step:after" && index === 1) {
-      setState({ run: true,stepIndex: 2});
-      console.log("bla");
-      console.log(run, stepIndex);
-      router.push("/category/read");
-    }
-
-    if (type === "step:after" && index === 2) {
-      setState({ run: true, stepIndex: 3 });
-      router.push("/");
+    const { status,action, index, lifecycle, type } = data;
+    const finishedStatuses = ["finished", "skipped"];
+    if (finishedStatuses.includes(status)) {
+      setState({ run: false, tourActive: false });
+      router.push("/category/read?tour=true");
     }
   };
+
 
   return (
     <div className={`${isOpen ? styles.sidebar_active : styles.sidebar}`}>
       <Joyride
         steps={steps}
         continuous={true}
-        showProgress={true}
         showSkipButton
         callback={handleCallback}
         run={run}
-        stepIndex={stepIndex}
       />
       <button
         onClick={() => {

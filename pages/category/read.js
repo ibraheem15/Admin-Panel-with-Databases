@@ -28,14 +28,10 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase.config";
-//redux
-import { useSelector, useDispatch } from "react-redux";
-import { setTour } from "../../redux/features/Tour";
-import { useAppContext } from "../../components/Tourcontext";
-//mount
-import { useMount } from "react-use";
 //joyride
 import Joyride, { CallBackProps } from "react-joyride";
+import { useMount } from "react-use";
+import { useAppContext } from "../../components/Tourcontext";
 
 export default function read() {
   const [categories, setcategories] = useState([]);
@@ -48,21 +44,6 @@ export default function read() {
     mobile: "",
   });
   const [socket, setSocket] = useState(sockett);
-
-  const {
-    setState,
-    state: { tourActive, run, stepIndex },
-  } = useAppContext();
-
-  useMount(() => {
-    console.log(tourActive);
-    console.log(stepIndex);
-    // if (tourActive) {
-    console.log("mount");
-    setState({ run: true, stepIndex: 2 });
-    console.log(run);
-    // }
-  });
 
   useEffect(() => {
     socket.on("categoryAdded", () => {
@@ -233,8 +214,62 @@ export default function read() {
     };
   });
 
+  //joyride
+  const {
+    setState,
+    state: { tourActive },
+  } = useAppContext();
+
+  useMount(() => {
+    // if (tourActive) {
+    setState({ run: true, stepIndex: 1 });
+    // }
+  });
+
+  const steps = [
+    {
+      target: "#add_category",
+      content: (
+        <>
+          <h1
+            style={{
+              textAlign: "center",
+              fontSize: "30px",
+              fontWeight: "bold",
+              fontFamily: "sans-serif",
+            }}
+          >
+            Add Category
+          </h1>
+          <p>
+            This button allows you to add a new category to your application.
+          </p>
+        </>
+      ),
+    },
+    {
+      target: "#nothing",
+    }
+  ];
+
+  const handleCallback = (data) => {
+    const { status, type, index } = data;
+    const finishedStatuses = ["finished", "skipped"];
+    if (finishedStatuses.includes(status)) {
+      setState({ run: false, tourActive: false });
+      router.push("/product/read?tour=true");
+    }
+  };
+
   return (
     <RootLayout>
+      <Joyride
+        steps={steps}
+        continuous={true}
+        callback={handleCallback}
+        run={router.query.tour === "true" ? true : false}
+        // stepIndex={stepIndex}
+      />
       <div className={styles.container}>
         {/* <ToastContainer /> */}
         <div className={styles.title}>

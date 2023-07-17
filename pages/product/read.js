@@ -25,6 +25,10 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase.config";
+//joyride
+import { useAppContext } from "../../components/Tourcontext";
+import { useMount } from "react-use";
+import Joyride, { CallBackProps } from "react-joyride";
 
 export default function read() {
   const [category, setcategory] = useState([]);
@@ -209,8 +213,60 @@ export default function read() {
     };
   });
 
+  //joyride
+  const {
+    setState,
+    state: { tourActive },
+  } = useAppContext();
+
+  useMount(() => {
+    setState({ run: true, stepIndex: 1 });
+  });
+
+  const steps = [
+    {
+      target: "#add_product",
+      content: (
+        <>
+          <h1
+            style={{
+              textAlign: "center",
+              fontSize: "30px",
+              fontWeight: "bold",
+              fontFamily: "sans-serif",
+            }}
+          >
+            Add Product
+          </h1>
+          <p>
+            This button allows you to add a new product to your application.
+          </p>
+        </>
+      ),
+    },
+    {
+      target: "#nothing",
+    }
+  ];
+
+  const handleCallback = (data) => {
+    const { status, type, index } = data;
+    const finishedStatuses = ["finished", "skipped"];
+    if (finishedStatuses.includes(status)) {
+      setState({ run: false, tourActive: false });
+      router.push("/profile?tour=true");
+    }
+  };
+
   return (
     <RootLayout>
+      <Joyride
+        steps={steps}
+        continuous={true}
+        callback={handleCallback}
+        run={router.query.tour === "true" ? true : false}
+        // stepIndex={stepIndex}
+      />
       <div className={styles.container}>
         <ToastContainer />
         <div className={styles.title}>
@@ -225,6 +281,7 @@ export default function read() {
               src="https://img.icons8.com/ios/50/plus-2-math.png"
               alt="plus-2-math"
               style={{ cursor: "pointer" }}
+              id="add_product"
             />
           </Link>
           <span

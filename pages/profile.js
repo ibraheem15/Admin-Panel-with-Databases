@@ -26,6 +26,10 @@ import {
   query,
   where,
 } from "firebase/firestore";
+//joyride
+import { useAppContext } from "../components/Tourcontext";
+import { useMount } from "react-use";
+import Joyride, { CallBackProps } from "react-joyride";
 
 export default function profile() {
   const [data, setData] = useState({
@@ -231,8 +235,63 @@ export default function profile() {
     };
   }, [socket]);
 
+  //joyride
+  const {
+    setState,
+    state: { tourActive },
+  } = useAppContext();
+
+  useMount(() => {
+    // if (tourActive) {
+    setState({ run: true, stepIndex: 1 });
+    // }
+  });
+
+  const steps = [
+    {
+      target: "#profile_update",
+      content: (
+        <>
+          <h1
+            style={{
+              textAlign: "center",
+              fontSize: "30px",
+              fontWeight: "bold",
+              fontFamily: "sans-serif",
+            }}
+          >
+            Profile Update
+          </h1>
+          <p>
+            This form allows you to{" "}
+            <span style={{ fontWeight: "bold" }}>update</span> your profile
+            information.
+          </p>
+        </>
+      ),
+    },
+  ];
+
+  const handleCallback = (data) => {
+    const { status, type, index } = data;
+    const finishedStatuses = ["finished", "skipped"];
+    if (finishedStatuses.includes(status)) {
+      setState({ run: false, tourActive: false });
+      router.push("/");
+    }
+  };
+
   return (
     <RootLayout>
+      <Joyride
+        steps={steps}
+        continuous={true}
+        callback={handleCallback}
+        run={
+          // if route has query param tour=true then run the tour
+          router.query.tour === "true" ? true : false
+        }
+      />
       <div
         className={styles.container}
         style={{
@@ -255,7 +314,11 @@ export default function profile() {
           </div>
           {/* form */}
 
-          <form className={styles.catForm} onSubmit={handleUpdate}>
+          <form
+            className={styles.catForm}
+            onSubmit={handleUpdate}
+            id="profile_update"
+          >
             <label className={styles.formLabel}>
               <input
                 type="text"
