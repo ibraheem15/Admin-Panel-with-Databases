@@ -447,6 +447,14 @@ export default function sidebar() {
                 onClick={toggleNotification}
                 id="notification"
               >
+                <span className={styles.list_title_icon}>
+                  <img
+                    width="19"
+                    height="19"
+                    src="https://img.icons8.com/material-sharp/24/appointment-reminders--v1.png"
+                    alt="appointment-reminders--v1"
+                  />
+                </span>
                 Notification
                 <span className={styles.list_title_iconn}>
                   {Notifications.length > 0 ? Notifications.length : null}

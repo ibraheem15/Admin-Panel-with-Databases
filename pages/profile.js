@@ -281,6 +281,16 @@ export default function profile() {
     }
   };
 
+  const showPassword = () => {
+    const x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+    
+  };
+
   return (
     <RootLayout>
       <Joyride
@@ -356,7 +366,7 @@ export default function profile() {
                     /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,})$/
                   )) && <span className={styles.error}>Invalid Email</span>}
             </label>
-            <label className={styles.formLabel}>
+            <label className={styles.passwordlabel}>
               <input
                 type="password"
                 onChange={(e) => setData({ ...data, password: e.target.value })}
@@ -365,6 +375,7 @@ export default function profile() {
                 placeholder="Password"
                 minLength={3}
                 value={data.password}
+                id="password"
               />
               {isformsubmitted &&
                 (data.password === "" ||
@@ -377,6 +388,18 @@ export default function profile() {
                     UPPER/lowercase and numbers and special characters
                   </span>
                 )}
+              <span
+                className={styles.showPassword}
+                onClick={showPassword}
+                id="showPassword"
+              >
+                <img
+                  width="18"
+                  height="18"
+                  src="https://img.icons8.com/fluency-systems-filled/48/visible.png"
+                  alt="visible"
+                />
+              </span>
             </label>
             <label className={styles.formLabel}>
               <input
