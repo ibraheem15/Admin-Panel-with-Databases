@@ -35,10 +35,15 @@ function signup() {
   }, []);
 
   const getusers = async () => {
-    axios.get("http://localhost/api/user/").then((res) => {
-      // console.log(res.data);
-      setUsers(res.data);
-    });
+    try {
+      axios.get("http://localhost/api/user/").then((res) => {
+        // console.log(res.data);
+        setUsers(res.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
   };
 
   const getFusers = async () => {
@@ -52,8 +57,9 @@ function signup() {
     e.preventDefault();
 
     const userExists = users.find((user) => user.username === data.username);
+    const fuserExists = fusers.find((fuser) => fuser.username === data.username);
 
-    if (userExists) {
+    if (userExists || fuserExists) {
       toast.error("User already exists", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2800,
@@ -65,27 +71,47 @@ function signup() {
           data
         );
         console.log(response.data);
+
+        toast.success("User created successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2800,
+        });
+
+        //firebase
+        // try {
+        const docRef = await addDoc(collectionRef, {
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          mobile: data.mobile,
+          createdAt: serverTimestamp(),
+        });
+        console.log("Document written with ID: ", docRef.id);
+        setCreateuser(docRef.id);
+        // } catch (e) {
+        console.error("Error adding document: ", e);
+        // }
         // Redirect to login page
-        window.location.href = "/login";
+        router.push("/login");
       } catch (error) {
         console.log(error);
       }
     }
 
-    //firebase
-    try {
-      const docRef = await addDoc(collectionRef, {
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        mobile: data.mobile,
-        createdAt: serverTimestamp(),
-      });
-      console.log("Document written with ID: ", docRef.id);
-      setCreateuser(docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    // //firebase
+    // try {
+    //   const docRef = await addDoc(collectionRef, {
+    //     username: data.username,
+    //     email: data.email,
+    //     password: data.password,
+    //     mobile: data.mobile,
+    //     createdAt: serverTimestamp(),
+    //   });
+    //   console.log("Document written with ID: ", docRef.id);
+    //   setCreateuser(docRef.id);
+    // } catch (e) {
+    //   console.error("Error adding document: ", e);
+    // }
   };
 
   const handleChange = (e) => {

@@ -9,12 +9,22 @@ import RootLayout from "../components/layout";
 import Cookies from "js-cookie";
 import { useRouter } from "next/dist/client/router";
 import { route } from "next/dist/server/router";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import authSlice, { logIn, logOut } from "../redux/features/authSlice";
+//firebase
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "../firebase.config";
 
 export default function Login() {
   const [data, setData] = useState({});
   const [users, setUsers] = useState([]);
+  const [fusers, setFusers] = useState([]);
+  const collectionRef = collection(db, "users");
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -24,6 +34,7 @@ export default function Login() {
       router.push("/");
     }
     getusers();
+    getFusers();
   }, []);
 
   const getusers = async () => {
@@ -37,6 +48,13 @@ export default function Login() {
         console.log(res.data);
         setUsers(res.data);
       });
+  };
+
+  const getFusers = async () => {
+    const querySnapshot = await getDocs(collectionRef);
+    const ffusers = querySnapshot.docs.map((doc) => doc.data());
+    console.log(ffusers);
+    setFusers(ffusers);
   };
 
   const handleSubmit = async (e) => {
@@ -73,11 +91,18 @@ export default function Login() {
       (user) => user.email === data.email && user.password === data.password
     );
 
-    if (user) {
-      dispatch(logIn(user));
+    //check if fuser exists
+    const fuser = fusers.find(
+      (fuser) => fuser.email === data.email && fuser.password === data.password
+    );
+
+    if (user || fuser) {
+      // dispatch(logIn(user));
+      dispatch(logIn(user || fuser));
 
       // set cookie
-      Cookies.set("user", JSON.stringify(user), { expires: 1 });
+      // Cookies.set("user", JSON.stringify(user), { expires: 1 });
+      Cookies.set("user", JSON.stringify(user || fuser), { expires: 1 });
       console.log(user);
       //show toast message
       toast.success("Login Successful", {

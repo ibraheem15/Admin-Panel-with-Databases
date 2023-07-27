@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer
       className={
-        page === "/login" || page === "/register"
+        page === "/login" || page === "/signup"
           ? styles.footer_login
           : styles.footer
       }

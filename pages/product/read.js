@@ -77,6 +77,19 @@ export default function read() {
       console.log(res.data);
       setproducts(res.data);
     });
+
+    //firebase
+    if (products.length == 0) {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const products = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(products);
+      setproducts(products);
+    }
   };
 
   const getcategory = async () => {
@@ -84,6 +97,19 @@ export default function read() {
       console.log(res.data);
       setcategory(res.data);
     });
+
+    //firebase
+    if (category.length == 0) {
+      const querySnapshot = await getDocs(collection(db, "categories"));
+      const categories = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(categories);
+      setcategory(categories);
+    }
   };
 
   const deleteproduct = async (id) => {

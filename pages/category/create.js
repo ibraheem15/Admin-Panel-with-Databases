@@ -89,16 +89,15 @@ export default function category() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost/api/category/index.php",
-        data
-      );
-      console.log(response.data);
-      toast.success("Category created successfully!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-
-      socket.emit("newCategory", response.data);
+      axios
+        .post("http://localhost/api/category/index.php", data)
+        .then((res) => {
+          console.log(res.data);
+          toast.success("Category created successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          socket.emit("newCategory", res.data);
+        });
 
       // firebase
       const collectionRef = collection(db, "categories");
@@ -108,6 +107,14 @@ export default function category() {
         created_at: serverTimestamp(),
       };
       const docRef = await addDoc(collectionRef, payload);
+      console.log("Document written with ID: ", docRef.id);
+      if (docRef.id) {
+        toast.success("Category created successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        router.push("/category/read");
+        return;
+      }
 
       //add notification to database
       const notification = {

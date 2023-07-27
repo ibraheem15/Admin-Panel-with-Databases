@@ -82,6 +82,20 @@ export default function read() {
     axios.get("http://localhost/api/category/index.php").then((res) => {
       setcategories(res.data);
     });
+
+    if (categories.length == 0) {
+      const docRef = collection(db, "categories");
+      const q = query(docRef);
+      const querySnapshot = await getDocs(q);
+      const categories = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(categories);
+      setcategories(categories);
+    }
   };
 
   const getUser = () => {
@@ -149,6 +163,10 @@ export default function read() {
         .then((res) => {
           console.log(res.data);
         });
+
+      toast.warning("Category deleted!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (err) {
       console.log(err);
       toast.error("Category not deleted!", {

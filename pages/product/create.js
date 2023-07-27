@@ -84,17 +84,25 @@ export default function category() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost/api/product/index.php",
-        data
-      );
-      console.log(response.data);
-      toast.success("Product created successfully", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2800,
-      });
+      // const response = await axios.post(
+      //   "http://localhost/api/product/index.php",
+      //   data
+      // );
+      // console.log(response.data);
+      // toast.success("Product created successfully", {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   autoClose: 2800,
+      // });
 
-      socket.emit("newProduct", response.data);
+      // socket.emit("newProduct", response.data);
+
+      axios.post("http://localhost/api/product/index.php", data).then((res) => {
+        console.log(res.data);
+        toast.success("Product created successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        socket.emit("newProduct", res.data);
+      });
 
       //firebase
       const docRef = await addDoc(collection(db, "products"), {
@@ -105,6 +113,15 @@ export default function category() {
         created_at: serverTimestamp(),
       });
       console.log("Document written with ID: ", docRef.id);
+
+      if (docRef.id) {
+        toast.success("Product created successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2800,
+        });
+        router.push("/product/read");
+        return;
+      }
 
       //notificiation in database
       axios

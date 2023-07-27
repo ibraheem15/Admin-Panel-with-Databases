@@ -78,6 +78,28 @@ export default function update() {
         category_id: result[0].category_id,
       });
     });
+
+    //firebase
+    const docRef = collection(db, "products");
+    const q = query(docRef);
+    getDocs(q).then((querySnapshot) => {
+      const products = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      const result = products.filter(
+        (item) => item.id == window.location.search.split("=")[1].split("&")[0]
+      );
+      setData({
+        id: result[0].id,
+        name: result[0].name,
+        price: result[0].price,
+        description: result[0].description,
+        category_id: result[0].category_id,
+      });
+    });
   }, [socket]);
 
   const getCategory = async () => {
@@ -99,6 +121,18 @@ export default function update() {
       });
     } catch (err) {
       console.log(err);
+    }
+
+    if (Products.length == 0) {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const products = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(products);
+      setProducts(products);
     }
   };
 

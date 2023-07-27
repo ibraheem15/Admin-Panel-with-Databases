@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
           <Nav />
           {/* <Sidebar /> */}
           {/* if page is login or register then dont show sidebar else show it */}
-          {page === "/login" || page === "/register" ? null : <Sidebar />}
+          {page === "/login" || page === "/signup" ? null : <Sidebar />}
           {children}
           {/* <Footer /> */}
         </AppProvider>

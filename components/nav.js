@@ -24,7 +24,7 @@ export function SignoutButton() {
   };
 
   if (router.pathname === "/login") return null;
-  if (router.pathname === "/register") return null;
+  if (router.pathname === "/signup") return null;
 
   return (
     <button onClick={handleSIgnOut} className={styles.button} id="signout">

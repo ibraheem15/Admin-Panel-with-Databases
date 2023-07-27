@@ -69,6 +69,31 @@ export default function update() {
         description: result[0].description,
       });
     });
+
+    //get all data from firebase and then filter it by id
+    const docRef = collection(db, "categories");
+    const q = query(docRef);
+    getDocs(q).then((querySnapshot) => {
+      const categories = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      const result = categories.filter(
+        (item) => item.id == window.location.search.split("=")[1].split("&")[0]
+      );
+      setData({
+        id: result[0].id,
+        name: result[0].name,
+        description: result[0].description,
+      });
+      setPrevData({
+        id: result[0].id,
+        name: result[0].name,
+        description: result[0].description,
+      });
+    });
   }, [socket]);
 
   const getCategory = async () => {
@@ -132,32 +157,32 @@ export default function update() {
           });
           socket.emit("updateCategory", res.data);
         });
-      try {
-        //firebase
-        const categoriesRef = collection(db, "categories");
-        const q = query(categoriesRef, where("name", "==", prevData.name));
-        const querySnapshot = await getDocs(q);
-        console.log(querySnapshot);
-        console.log(prevData.name);
+      // try {
+      //firebase
+      const categoriesRef = collection(db, "categories");
+      const q = query(categoriesRef, where("name", "==", prevData.name));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
+      console.log(prevData.name);
 
-        const categories = querySnapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          };
-        });
-        console.log(categories);
+      const categories = querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(categories);
 
-        categories.forEach((category) => {
-          updateDoc(doc(db, "categories", category.id), {
-            name: data.name,
-            description: data.description,
-            updated_at: serverTimestamp(),
-          });
+      categories.forEach((category) => {
+        updateDoc(doc(db, "categories", category.id), {
+          name: data.name,
+          description: data.description,
+          updated_at: serverTimestamp(),
         });
-      } catch (e) {
-        console.log(e);
-      }
+      });
+      // } catch (e) {
+      console.log(e);
+      // }
 
       //notificiation in database
       axios
@@ -169,7 +194,9 @@ export default function update() {
         .then((res) => {
           console.log(res.data);
         });
-
+      toast.info("Category updated!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       setTimeout(() => {
         router.push("/category/read");
       }, 3000);
